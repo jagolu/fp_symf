@@ -1,4 +1,12 @@
 <?php
+    $conn = new mysqli("localhost", "admin", "j14g07l95-Ax92z", "app_porras");
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+    
+    
+
     $url=file_get_contents('http://www.laliga.es/laliga-santander');
     $html = new DomDocument;
     $teams = new DOMNodeList;
@@ -23,9 +31,7 @@
         }
         
         $teamsCSSClass []= $class;
-        //Aqui metemos UNICAMENTE el nombre del equipo en la BD
-        //echo $teamName.'</br>';
-        $equipos [] = $teamName; //Esta asignacion luego se borra
+        $equipos [] = $teamName; 
     }
 
     unset($url);
@@ -66,14 +72,16 @@
         for($j=$start;$j<strlen($subarray);$j++){
             $pix = $pix.$subarray[$j];
         }
-        echo $equipos[$i].'</br>';
+        $sql = "INSERT INTO equipos (nombre,  pixeles) VALUES ('".$equipos[$i]."', '".$pix."')";
+        mysqli_query($conn, $sql);
+        /*echo $equipos[$i].'</br>';
         echo "
             <span style=\"display: block; 
             background-image: url(https://statics.laliga.es/img/sprite-escudos-2019-v1.png); 
             background-position:".$pix."; 
             background-size: 40px 1720px; 
             width: 40px; 
-            height: 40px;\"></span></br>";
+            height: 40px;\"></span></br>";*/
 
     }
 ?>
