@@ -4,6 +4,7 @@
     $teams = new DOMNodeList;
     $links = new DOMNodeList;
     $teamsCSSClass = [];
+    $equipos = []; //Esta variable luego la borramos
 
     @$html->loadHTML($url);
 
@@ -14,18 +15,23 @@
         $team = new DomNode;
         $team = $teams->item($i); //Obtenemos un equipo
         $teamName = $team->nodeValue; //Obtenemos el nombre del equipo
-        $teamsCSSClass[] = $team->firstChild->firstChild->firstChild->attributes->getnamedItem("class")->value; //Obtenemos la clase CSS del equipo
-
+        $badClass = $team->firstChild->firstChild->firstChild->attributes->getnamedItem("class")->value; //Obtenemos el CSS de la clase del equipo
+        $class = "";
+        for($j=0;$j<strlen($badClass);$j++){   //Sustituimos el espacio de llamada por el punto de la clase en el css
+            if($badClass[$j] == ' ') $class= $class . ".";
+            else $class = $class . (string)$badClass[$j];
+        }
+        
+        $teamsCSSClass []= $class;
         //Aqui metemos UNICAMENTE el nombre del equipo en la BD
-        echo $teamName.'</br>';
-        echo '       '.$teamsCSSClass[$i].'</br></br>';
+        //echo $teamName.'</br>';
+        $equipos [] = $teamName; //Esta asignacion luego se borra
     }
 
     unset($url);
     unset($teams);
 
     //Ahora vamos a obtener la ruta del fichero CSS
-    echo '</br></br></br>';
     $cssUrl;
 
     $links = $html->getElementsByTagName("link");
@@ -48,5 +54,26 @@
     
     unset($links);
 
-    echo $cssUrl;
+    $css = file_get_contents($cssUrl);
+    for($i=0;$i<count($teamsCSSClass);$i++){
+        $start= strpos($css, $teamsCSSClass[$i]) + strlen($teamsCSSClass[$i])+1;
+        $subarray="";
+        for($j=$start;$css[$j]!='}';$j++){
+            $subarray = $subarray . $css[$j];
+        }
+        $start = strpos($subarray, "background-position:")+strlen("background-position:");
+        $pix="";
+        for($j=$start;$j<strlen($subarray);$j++){
+            $pix = $pix.$subarray[$j];
+        }
+        echo $equipos[$i].'</br>';
+        echo "
+            <span style=\"display: block; 
+            background-image: url(https://statics.laliga.es/img/sprite-escudos-2019-v1.png); 
+            background-position:".$pix."; 
+            background-size: 40px 1720px; 
+            width: 40px; 
+            height: 40px;\"></span></br>";
+
+    }
 ?>
