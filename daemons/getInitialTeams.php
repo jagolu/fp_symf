@@ -12,7 +12,7 @@
     $teams = new DOMNodeList;
     $links = new DOMNodeList;
     $teamsCSSClass = [];
-    $equipos = []; //Esta variable luego la borramos
+    $equipos = [];
 
     @$html->loadHTML($url);
 
@@ -49,8 +49,8 @@
         if($ato!=null){
             $type = new DomNamedNodeMap;
             $href = new DomNamedNodeMap;
-            $type = $ato->getNamedItem("type");
-            $href = $ato->getNamedItem("href");
+            $type = $ato->getNamedItem("type");  //Buscamos el type (para que sea type="text/css")
+            $href = $ato->getNamedItem("href"); //Buscamos el enlace al fichero css
             if($type!=null && $type->value =="text/css"){
                 $cssUrl = $href->value;
                 break;
@@ -62,26 +62,17 @@
 
     $css = file_get_contents($cssUrl);
     for($i=0;$i<count($teamsCSSClass);$i++){
-        $start= strpos($css, $teamsCSSClass[$i]) + strlen($teamsCSSClass[$i])+1;
+        $start= strpos($css, $teamsCSSClass[$i]) + strlen($teamsCSSClass[$i])+1;  //Buscamos en el fichero CSS la clase CSS del equipo en cuestion
         $subarray="";
-        for($j=$start;$css[$j]!='}';$j++){
+        for($j=$start;$css[$j]!='}';$j++){   //Guardamos lo que hay entre corchetes en un string
             $subarray = $subarray . $css[$j];
         }
-        $start = strpos($subarray, "background-position:")+strlen("background-position:");
+        $start = strpos($subarray, "background-position:")+strlen("background-position:");  //Dentro del string buscamos lo que nos interesa
         $pix="";
-        for($j=$start;$j<strlen($subarray);$j++){
+        for($j=$start;$j<strlen($subarray);$j++){   //Obtenemos los valores de background-position
             $pix = $pix.$subarray[$j];
         }
-        $sql = "INSERT INTO equipos (nombre,  pixeles) VALUES ('".$equipos[$i]."', '".$pix."')";
+        $sql = "INSERT INTO equipos (nombre,  pixeles) VALUES ('".$equipos[$i]."', '".$pix."')";  //Insertamos dichos valores en la BD
         mysqli_query($conn, $sql);
-        /*echo $equipos[$i].'</br>';
-        echo "
-            <span style=\"display: block; 
-            background-image: url(https://statics.laliga.es/img/sprite-escudos-2019-v1.png); 
-            background-position:".$pix."; 
-            background-size: 40px 1720px; 
-            width: 40px; 
-            height: 40px;\"></span></br>";*/
-
     }
 ?>
