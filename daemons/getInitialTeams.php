@@ -72,7 +72,7 @@
         for($j=$start;$j<strlen($subarray);$j++){   //Obtenemos los valores de background-position
             $pix = $pix.$subarray[$j];
         }
-        $sql = "INSERT INTO equipos (nombre,  pixeles) VALUES ('".$equipos[$i]."', '".$pix."')";  //Insertamos dichos valores en la BD
+        $sql = "INSERT INTO teams (nombre,  pixeles) VALUES ('".$equipos[$i]."', '".$pix."')";  //Insertamos dichos valores en la BD
         mysqli_query($conn, $sql);
     }
 ?>
