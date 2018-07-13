@@ -5,6 +5,10 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="{{asset('./css/welcomePage.css')}}"/>
+            <link rel="stylesheet" href="{{asset('./css/bootstrap.css')}}"/>
+        {% endblock %}
+        {% block javascripts %}
+            <script rel="text/javascript" src="{{asset('./js/jquery-3.3.1.min.js')}}"></script>
         {% endblock %}
     </head>
     <body>

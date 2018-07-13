@@ -9,26 +9,26 @@
     </div>
     <div id="loginDiv" style="visibility: hidden">
         <form >
-            <p class="loginForm">Email:</p>
-            <input type="text" class="loginForm">
-            <p class="loginForm">Password:</p>
-            <input type="password" class="loginForm">
+            <input type="text" class="btn btn-success btn-primary btn-lg loginForm" placeholder="Escribe aquí tu email">
+            </br></br>
+            <input type="password" class="btn btn-success btn-primary btn-lg loginForm" placeholder="Escribe aquí tu contraseña">
         </form>
     </div>
     <div id="checkInDiv" style="visibility: hidden">
         <form>
-            <p class="checkInForm">Email:</p>
-            <input type="text" class="checkInForm">
-            <p class="checkInForm">Alias:</p>
-            <input type="text" class="checkInForm">
-            <p class="checkInForm">Password:</p>
-            <input type="password" class="checkInForm">
+            <input type="text" class="btn btn-success btn-primary btn-lg checkInForm" placeholder="Escribe aquí tu email">
             </br></br>
-            <div id="radioButtonRoom">
-                Sala existente
-                <input type="radio" id="existingRoom" name="room" checked/>
-                Nueva sala
-                <input type="radio" id="newRoom" name="room"/>
+            <input type="text" class="btn btn-success btn-primary btn-lg  checkInForm" placeholder="Escribe aqui tu nombre de usuario">
+            </br></br>
+            <input type="password" class="btn btn-success btn-primary btn-lg  checkInForm" placeholder="Escribe aquí tu contraseña">
+            </br></br>
+           <div id="radioButtonRoom" class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label  id="radioButtonRoomExistingRoom" class="btn btn-secondary btn-success active">
+                    <input type="radio" name="room" autocomplete="off" checked>Sala existente 
+                </label>
+                <label id="radioButtonRoomNewRoom" class="btn btn-secondary btn-success">
+                    <input type="radio" name="room" autocomplete="off">Nueva sala
+                </label>
             </div>
         </form>
     </div>
@@ -42,25 +42,32 @@
             $("#loginButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
                 setTimeout(function(){
-                    //$("#buttons").fadeOut(); 
+                    $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
-                    //$(".loginForm").fadeIn(300);
+                    $(".loginForm").fadeIn(400);
                     document.getElementById("loginDiv").style.visibility = "visible";
-                }, 400); 
+                }, 450); 
             });
             //Mostrar formCheckIn
             $("#checkInButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
                 setTimeout(function(){
-                   // $("#buttons").fadeOut(); 
+                   $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
-                   // $(".checkInForm").fadeIn(300);
+                    $(".checkInForm").fadeIn(400);
                     document.getElementById("checkInDiv").style.visibility = "visible";
-                }, 500); 
+                }, 450); 
             });
-            //Create new 
+            $('#radioButtonRoomNewRoom').click(function(){
+                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-secondary btn-success";
+                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-secondary btn-success active";
+            });
+            $('#radioButtonRoomExistingRoom').click(function(){
+                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-secondary btn-success";
+                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-secondary btn-success active";
+            });
         });
     </script>
 {% endblock %}
