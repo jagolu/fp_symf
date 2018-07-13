@@ -1,5 +1,2 @@
-index:
-    path: /
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
-    defaults:
-      template: login/welcomePage.html.twig
+routes_login:
+  resource: .\routing\routes_login.yaml
