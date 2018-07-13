@@ -7,7 +7,7 @@ body{
 #buttons{
     margin-top: 14%;
 }
-.initialButton, .loginForm, .checkInForm{
+.initialButton, .logIn, .checkIn{
     width: 50%;
 }
 #loginDiv{
@@ -21,4 +21,8 @@ input::placeholder{
 }
 #radioButtonRoom, #radioButtonRoomExistingRoom, #radioButtonRoomNewRoom{
     width:50%;
+}
+.send{
+    width: 13%;
+    margin-left: 18.3%;
 }

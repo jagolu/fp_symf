@@ -9,7 +9,7 @@
                 die("Connection failed: " . $conn->connect_error);
             }
             
-            $sql = "SELECT nombre, pixeles FROM equipos";
+            $sql = "SELECT nombre, pixeles FROM teams";
             $result = $conn->query($sql);
 
             while($row = $result->fetch_assoc()){

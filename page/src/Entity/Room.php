@@ -22,6 +22,13 @@ class Room
     private $idRoom;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=30, nullable=false)
+     */
+    private $password;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
@@ -45,6 +52,18 @@ class Room
     public function getIdRoom(): ?int
     {
         return $this->idRoom;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     public function getType(): ?int

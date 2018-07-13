@@ -3,33 +3,37 @@
 {% block body %}
     <div id="buttons">
         </br>
-        <button id="loginButton" class="btn btn-success btn-primary btn-lg initialButton">Iniciar sesion</button>
+        <button id="loginButton" class="btn btn-dark btn-lg initialButton">Iniciar sesion</button>
         </br></br>
-        <button id="checkInButton" class="btn btn-success btn-primary btn-lg initialButton">Registrarse</button>
+        <button id="checkInButton" class="btn btn-dark  btn-lg initialButton">Registrarse</button>
     </div>
     <div id="loginDiv" style="visibility: hidden">
-        <form >
-            <input type="text" class="btn btn-success btn-primary btn-lg loginForm" placeholder="Escribe aquí tu email">
+        <form action="{{ path('login_check') }}" method="post">
+            <input type="text" name="email" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu email">
             </br></br>
-            <input type="password" class="btn btn-success btn-primary btn-lg loginForm" placeholder="Escribe aquí tu contraseña">
+            <input type="password" name="password" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu contraseña">
+            </br></br>
+            <button type="submit" class="btn btn-secondary btn-lg send">Entrar</button>
         </form>
     </div>
-    <div id="checkInDiv" style="visibility: hidden">
-        <form>
-            <input type="text" class="btn btn-success btn-primary btn-lg checkInForm" placeholder="Escribe aquí tu email">
+    <div id="checkInDiv" style="visibility: hidden" >
+        <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm">
+            <input type="text" name="email" class="btn btn-dark btn-lg checkIn" placeholder="Escribe aquí tu email">
             </br></br>
-            <input type="text" class="btn btn-success btn-primary btn-lg  checkInForm" placeholder="Escribe aqui tu nombre de usuario">
+            <input type="text" name="username" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario">
             </br></br>
-            <input type="password" class="btn btn-success btn-primary btn-lg  checkInForm" placeholder="Escribe aquí tu contraseña">
+            <input type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña">
             </br></br>
            <div id="radioButtonRoom" class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label  id="radioButtonRoomExistingRoom" class="btn btn-secondary btn-success active">
+                <label  id="radioButtonRoomExistingRoom" name="room" class="btn btn-dark btn-dark active">
                     <input type="radio" name="room" autocomplete="off" checked>Sala existente 
                 </label>
-                <label id="radioButtonRoomNewRoom" class="btn btn-secondary btn-success">
+                <label id="radioButtonRoomNewRoom" name="room" class="btn btn-dark btn-dark">
                     <input type="radio" name="room" autocomplete="off">Nueva sala
                 </label>
             </div>
+            </br></br>
+            <button type="submit" class="btn btn-secondary btn-lg send">Registrarse</button>
         </form>
     </div>
  
@@ -45,7 +49,7 @@
                     $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
-                    $(".loginForm").fadeIn(400);
+                    $(".logIn").fadeIn(400);
                     document.getElementById("loginDiv").style.visibility = "visible";
                 }, 450); 
             });
@@ -56,17 +60,19 @@
                    $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
-                    $(".checkInForm").fadeIn(400);
+                    $(".checkIn").fadeIn(400);
                     document.getElementById("checkInDiv").style.visibility = "visible";
                 }, 450); 
             });
             $('#radioButtonRoomNewRoom').click(function(){
-                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-secondary btn-success";
-                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-secondary btn-success active";
+                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-dark btn-dark";
+                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-dark btn-dark active";
+                document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
             });
             $('#radioButtonRoomExistingRoom').click(function(){
-                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-secondary btn-success";
-                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-secondary btn-success active";
+                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-dark btn-dark";
+                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-dark btn-dark active";
+                document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
     </script>
