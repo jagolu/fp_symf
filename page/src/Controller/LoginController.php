@@ -14,9 +14,25 @@ class LoginController extends Controller
         $email = $_POST['email'];
         $username = $_POST['username'];
         $password = $_POST['password'];
-        //Comprobacion tipografia y longitud password
-        //Comprobacion tipografia y longitud username
-        //Comprobar que no toquen el where
+        
+        
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new Response("Your email is not valid");
+        }
+        //Comprobacion tipografia password
+        if(strlen($password)<8 || strlen($password)>20){
+            return new Response("There has been an error with the length of the password");
+        }
+        //Comprobacion tipografia username
+        if(strlen($username)<3 || strlen($username)>20){
+            return new Response("There has been an error with the length of the username");
+        }
+        if($where != 'newRoom' || $where != 'existingRoom'){
+            return new Response("There has been an error with the value of the parameter 'where'");
+        }
+
+
+
         $users = $this->getDoctrine()
         ->getRepository(User::class)
         ->findByEmail($email);

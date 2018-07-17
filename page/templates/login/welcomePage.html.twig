@@ -75,37 +75,71 @@
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
-        function validateCheckIn(){
+        /*function validateCheckIn(){
             ready = true;
-            if(document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50){
+            if(notRightEmail("checkInEmail") || (document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50)){
                 itsWrong('checkInEmail', 'No es un email correcto');
                 ready=false;
             }
-            if(document.getElementById('checkInUsername').value.length<2 || document.getElementById('checkInUsername').value.length>20){
-                itsWrong('checkInUsername', 'No es un username correcto');
+            else{
+                itsWell("checkInEmail");
+            }
+            if(document.getElementById('checkInUsername').value.length<3 || document.getElementById('checkInUsername').value.length>20){
+                itsWrong('checkInUsername', 'No es un nombre de usuario correcto');
                 ready=false;
             }
-            if(document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20){
-                itsWrong('checkInUsername', 'No es una contraseña correcta');
+            else{
+                itsWell("checkInUsername");
+            }
+            if(notRightPassword('checkInPassword') || (document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20)){
+                itsWrong('checkInPassword', 'La contraseña debe tener minimo 8 caracteres');
                 ready=false;
+            }
+            else{
+                itsWell("checkInPassword");
             }
             return ready;
         }
         function validateLogIn(){
             ready = true;
-            if(document.getElementById('logInEmail').value.length<5 || document.getElementById('logInEmail').value.length>50){
+            if(notRightEmail("logInEmail") || (document.getElementById("logInEmail").value.length<5 || document.getElementById("logInEmail").value.length>50)){
                 itsWrong('logInEmail', 'No es un email correcto');
                 ready=false;
             }
-            if(document.getElementById('logInPassword').value.length<8 || document.getElementById('logInPassword').value.length>20){
+            else{
+                itsWell("logInEmail");
+            }
+            if(notRightPassword('logInPassword') || (document.getElementById('logInPassword').value.length<8 && document.getElementById('logInPassword').value.length>20)){
                 itsWrong('logInPassword', 'No es una contraseña correcta');
                 ready=false;
             }
+            else{
+                itsWell("logInPassword");
+            }
             return ready;
+        }
+        function notRightEmail(id){
+            campo = document.getElementById(id).value;
+            emailRegex =/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+            if (emailRegex.test(campo)) {
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        function notRightPassword(id){
+            long = document.getElementById(id).length;
+            if(long<8) return true;
+            else return false;
         }
         function itsWrong(id, message){
             document.getElementById(id).style.backgroundColor="#8B0000";
+            document.getElementById(id).value="";
             document.getElementById(id).placeholder=message;
         }
+        function itsWell(id){
+            document.getElementById(id).style.backgroundColor="#343a40";
+        }*/
     </script>
 {% endblock %}
