@@ -8,21 +8,21 @@
         <button id="checkInButton" class="btn btn-dark  btn-lg initialButton">Registrarse</button>
     </div>
     <div id="loginDiv" style="visibility: hidden">
-        <form action="{{ path('login_check') }}" method="post">
-            <input type="text" name="email" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu email">
+        <form action="{{ path('login_check') }}" method="post" onsubmit="return validateLogIn()">
+            <input id="logInEmail" type="text" name="email" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu email" maxlength="50">
             </br></br>
-            <input type="password" name="password" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu contraseña">
+            <input id="logInPassword" type="password" name="password" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
             </br></br>
-            <button type="submit" class="btn btn-secondary btn-lg send">Entrar</button>
+            <input type="submit" class="btn btn-secondary btn-lg send" value="Entrar">
         </form>
     </div>
     <div id="checkInDiv" style="visibility: hidden" >
-        <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm">
-            <input type="text" name="email" class="btn btn-dark btn-lg checkIn" placeholder="Escribe aquí tu email">
+        <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm" onsubmit="return validateCheckIn()">
+            <input id="checkInEmail" type="text" name="email" class="btn btn-dark btn-lg checkIn" placeholder="Escribe aquí tu email" maxlength="50">
             </br></br>
-            <input type="text" name="username" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario">
+            <input id="checkInUsername" type="text" name="username" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario" maxlength="20">
             </br></br>
-            <input type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña">
+            <input id="checkInPassword" type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
             </br></br>
            <div id="radioButtonRoom" class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label  id="radioButtonRoomExistingRoom" name="room" class="btn btn-dark btn-dark active">
@@ -75,5 +75,37 @@
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
+        function validateCheckIn(){
+            ready = true;
+            if(document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50){
+                itsWrong('checkInEmail', 'No es un email correcto');
+                ready=false;
+            }
+            if(document.getElementById('checkInUsername').value.length<2 || document.getElementById('checkInUsername').value.length>20){
+                itsWrong('checkInUsername', 'No es un username correcto');
+                ready=false;
+            }
+            if(document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20){
+                itsWrong('checkInUsername', 'No es una contraseña correcta');
+                ready=false;
+            }
+            return ready;
+        }
+        function validateLogIn(){
+            ready = true;
+            if(document.getElementById('logInEmail').value.length<5 || document.getElementById('logInEmail').value.length>50){
+                itsWrong('logInEmail', 'No es un email correcto');
+                ready=false;
+            }
+            if(document.getElementById('logInPassword').value.length<8 || document.getElementById('logInPassword').value.length>20){
+                itsWrong('logInPassword', 'No es una contraseña correcta');
+                ready=false;
+            }
+            return ready;
+        }
+        function itsWrong(id, message){
+            document.getElementById(id).style.backgroundColor="#8B0000";
+            document.getElementById(id).placeholder=message;
+        }
     </script>
 {% endblock %}
