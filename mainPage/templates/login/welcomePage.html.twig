@@ -24,6 +24,8 @@
             </br></br>
             <input id="checkInPassword" type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
             </br></br>
+            <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="btn btn-dark btn-lg  checkIn" placeholder="Repite la contraseña" maxlength="20">
+            </br></br>
            <div id="radioButtonRoom" class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label  id="radioButtonRoomExistingRoom" name="room" class="btn btn-dark btn-dark active">
                     <input type="radio" name="room" autocomplete="off" checked>Sala existente 
@@ -33,7 +35,10 @@
                 </label>
             </div>
             </br></br>
-            <button type="submit" class="btn btn-secondary btn-lg send">Registrarse</button>
+            <div id="behindSubmit" class="btn-group" data-toggle="buttons">
+                <button class="btn btn-secondary btn-lg ">Atras</button>
+                <button type="submit" class="btn btn-secondary btn-lg send">Registrarse</button>
+            </div>
         </form>
     </div>
  
@@ -75,7 +80,7 @@
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
-        /*function validateCheckIn(){
+        function validateCheckIn(){
             ready = true;
             if(notRightEmail("checkInEmail") || (document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50)){
                 itsWrong('checkInEmail', 'No es un email correcto');
@@ -140,6 +145,12 @@
         }
         function itsWell(id){
             document.getElementById(id).style.backgroundColor="#343a40";
-        }*/
+        }
+        function distinctPassword(){
+            pass1 = document.getElementById('checkInPassword').value;
+            pass2 = document.getElementById('checkInRepeatPassword').value;
+            if(pass1 != pass2) return true;
+            else return false;
+        }
     </script>
 {% endblock %}
