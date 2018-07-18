@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function checkBeforeRoom($where){
         $email = $_POST['email'];
-        $username = $_POST['username'];
+        $nickname = $_POST['nickname'];
         $password = $_POST['password'];
         
         
@@ -24,11 +24,11 @@ class LoginController extends Controller
             return new Response("There has been an error with the length of the password");
         }
         //Comprobacion tipografia username
-        if(strlen($username)<3 || strlen($username)>20){
-            return new Response("There has been an error with the length of the username");
+        if(strlen($nickname)<3 || strlen($nickname)>20){
+            return new Response("There has been an error with the length of the nickname");
         }
-        if($where != 'newRoom' || $where != 'existingRoom'){
-            return new Response("There has been an error with the value of the parameter 'where'");
+        if($where != 'newRoom' && $where != 'existingRoom'){
+            return new Response("There has been an error with the value of the parameter 'where'".$where);
         }
 
 
@@ -42,7 +42,7 @@ class LoginController extends Controller
         else{
             $user = new User();
             $user->setEmail($email);
-            $user->setUsername($username);
+            $user->setNickname($nickname);
             $encoder = new BCryptPasswordEncoder(15);
             $newPassword = $encoder->encodePassword($password, $user->getsalt());
             $user->setPassword($newPassword);

@@ -1,2 +1,0 @@
-routes_login:
-  resource: .\routing\routes_login.yaml

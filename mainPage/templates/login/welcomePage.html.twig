@@ -20,7 +20,7 @@
         <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm" onsubmit="return validateCheckIn()">
             <input id="checkInEmail" type="text" name="email" class="btn btn-dark btn-lg checkIn" placeholder="Escribe aquí tu email" maxlength="50">
             </br></br>
-            <input id="checkInUsername" type="text" name="username" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario" maxlength="20">
+            <input id="checkInNickname" type="text" name="nickname" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario" maxlength="20">
             </br></br>
             <input id="checkInPassword" type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
             </br></br>
@@ -84,12 +84,12 @@
             else{
                 itsWell("checkInEmail");
             }
-            if(document.getElementById('checkInUsername').value.length<3 || document.getElementById('checkInUsername').value.length>20){
-                itsWrong('checkInUsername', 'No es un nombre de usuario correcto');
+            if(document.getElementById('checkInNickname').value.length<3 || document.getElementById('checkInNickname').value.length>20){
+                itsWrong('checkInNickname', 'No es un nombre de usuario correcto');
                 ready=false;
             }
             else{
-                itsWell("checkInUsername");
+                itsWell("checkInNickname");
             }
             if(notRightPassword('checkInPassword') || (document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20)){
                 itsWrong('checkInPassword', 'La contraseña debe tener minimo 8 caracteres');

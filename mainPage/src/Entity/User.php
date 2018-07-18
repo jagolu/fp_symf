@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -31,9 +32,9 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=20, nullable=false)
+     * @ORM\Column(name="nickname", type="string", length=20, nullable=false)
      */
-    private $username;
+    private $nickname;
 
     /**
      * @var string
@@ -41,6 +42,19 @@ class User
      * @ORM\Column(name="password", type="string", length=500, nullable=false)
      */
     private $password;
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     */
+    private $isActive;
+
+
+    public function __construct()
+    {
+        $this->isActive = true;
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid('', true));
+    }
 
     public function getIdUser(): ?int
     {
@@ -59,14 +73,14 @@ class User
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getNickname(): ?string
     {
-        return $this->username;
+        return $this->nickname;
     }
 
-    public function setUsername(string $username): self
+    public function setNickname(string $nickname): self
     {
-        $this->username = $username;
+        $this->nickname = $nickname;
 
         return $this;
     }
@@ -83,7 +97,17 @@ class User
         return $this;
     }
 
-    //Provider
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
 
     public function getRoles()
     {
@@ -99,9 +123,9 @@ class User
     {
         return serialize(array(
             $this->idUser,
-            $this->username,
-            $this->password,
             $this->email,
+            $this->nickname,
+            $this->password,
             // see section on salt below
             // $this->salt,
         ));
@@ -111,30 +135,12 @@ class User
     public function unserialize($serialized)
     {
         list (
-            $this->id,
-            $this->username,
+            $this->idUser,
+            $this->email,
+            $this->nickname,
             $this->password,
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized, array('allowed_classes' => false));
     }
-
-    //NOT SURE IF I NEED THIS PART
-
-    /*private $isActive;
-
-    public function __construct()
-    {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
-    }*/
-
-    public function getSalt()
-    {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
-        return null;
-    }
-
 }
