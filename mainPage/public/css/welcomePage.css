@@ -1,28 +1,19 @@
 body{
     background-color: #EEE;
-}
-#buttons, #loginDiv, #checkInDiv{
-    margin-left: 34%;
+    padding-right:5%;
+    padding-left: 5%;
 }
 #buttons{
-    margin-top: 14%;
-}
-.initialButton, .logIn, .checkIn{
-    width: 50%;
+    padding-top:15%;
+    display: block;
 }
 #loginDiv{
-    margin-top: 15.3%;
+    padding-top:16.4%;
+    display:none; 
+    visibility: hidden;
 }
 #checkInDiv{
-    margin-top: -6%;
-}
-input::placeholder{
-    color: white;
-}
-#radioButtonRoom, #radioButtonRoomExistingRoom, #radioButtonRoomNewRoom{
-    width:50%;
-}
-.send{
-    width: 13%;
-    margin-left: 18.3%;
+    padding-top:16.3%;
+    display:none; 
+    visibility: hidden;
 }

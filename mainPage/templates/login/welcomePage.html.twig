@@ -1,46 +1,46 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div id="buttons">
+    <center id="buttons">
         </br>
-        <button id="loginButton" class="btn btn-dark btn-lg initialButton">Iniciar sesion</button>
+        <button id="loginButton" class="col-md-6 btn btn-outline-secondary">Iniciar sesion</button>
         </br></br>
-        <button id="checkInButton" class="btn btn-dark  btn-lg initialButton">Registrarse</button>
-    </div>
-    <div id="loginDiv" style="visibility: hidden">
+        <button id="checkInButton" class="col-md-6 btn btn-outline-secondary">Registrarse</button>
+    </center>
+    <center id="loginDiv">
         <form action="{{ path('login_check') }}" method="post" onsubmit="return validateLogIn()">
-            <input id="logInEmail" type="text" name="email" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu email" maxlength="50">
+            <input id="logInEmail" type="text" name="email" class="col-md-6 btn btn-outline-secondary" placeholder="Email" maxlength="50">
             </br></br>
-            <input id="logInPassword" type="password" name="password" class="btn btn-dark btn-lg logIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
+            <input id="logInPassword" type="password" name="password" class="col-md-6 btn btn-outline-secondary" placeholder="Contraseña" maxlength="20">
             </br></br>
-            <input type="submit" class="btn btn-secondary btn-lg send" value="Entrar">
+            <input type="submit" class="col-md-6 btn btn-outline-secondary" value="Entrar">
         </form>
-    </div>
-    <div id="checkInDiv" style="visibility: hidden" >
+    </center>
+    <center id="checkInDiv">
         <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm" onsubmit="return validateCheckIn()">
-            <input id="checkInEmail" type="text" name="email" class="btn btn-dark btn-lg checkIn" placeholder="Escribe aquí tu email" maxlength="50">
+            <input id="checkInEmail" type="text" name="email" class="col-md-6 btn btn-outline-secondary" placeholder="Email" maxlength="50">
             </br></br>
-            <input id="checkInNickname" type="text" name="nickname" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aqui tu nombre de usuario" maxlength="20">
+            <input id="checkInNickname" type="text" name="nickname" class="col-md-6 btn btn-outline-secondary" placeholder="Nombre de usuario" maxlength="20">
             </br></br>
-            <input id="checkInPassword" type="password" name="password" class="btn btn-dark btn-lg  checkIn" placeholder="Escribe aquí tu contraseña" maxlength="20">
+            <input id="checkInPassword" type="password" name="password" class="col-md-6 btn btn-outline-secondary" placeholder="Contraseña" maxlength="20">
             </br></br>
-            <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="btn btn-dark btn-lg  checkIn" placeholder="Repite la contraseña" maxlength="20">
+            <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="col-md-6 btn btn-outline-secondary" placeholder="Repite la contraseña" maxlength="20">
             </br></br>
-           <div id="radioButtonRoom" class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label  id="radioButtonRoomExistingRoom" name="room" class="btn btn-dark btn-dark active">
+           <div id="radioButtonRoom" class="col-md-6  btn-group btn-group-toggle" data-toggle="buttons">
+                <label  id="radioButtonRoomExistingRoom" name="room" class="col-md-6  btn btn-outline-secondary active">
                     <input type="radio" name="room" autocomplete="off" checked>Sala existente 
                 </label>
-                <label id="radioButtonRoomNewRoom" name="room" class="btn btn-dark btn-dark">
+                <label id="radioButtonRoomNewRoom" name="room" class="col-md-6  btn btn-outline-secondary">
                     <input type="radio" name="room" autocomplete="off">Nueva sala
                 </label>
             </div>
             </br></br>
-            <div id="behindSubmit" class="btn-group" data-toggle="buttons">
-                <button class="btn btn-secondary btn-lg ">Atras</button>
-                <button type="submit" class="btn btn-secondary btn-lg send">Registrarse</button>
+            <div id="behindSubmit" class="col-md-6  btn-group" data-toggle="buttons">
+                <button class="col-md-6  btn btn-outline-secondary">Atras</button>
+                <button type="submit" class="col-md-6  btn btn-outline-secondary">Registrarse</button>
             </div>
         </form>
-    </div>
+    </center>
  
 {% endblock %}
 {% block javascripts %}
@@ -50,33 +50,37 @@
             //Mostrar formLogin
             $("#loginButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
+                document.getElementById("buttons").style.display= "none";
                 setTimeout(function(){
                     $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
                     $(".logIn").fadeIn(400);
                     document.getElementById("loginDiv").style.visibility = "visible";
+                    document.getElementById("loginDiv").style.display = "block";
                 }, 450); 
             });
             //Mostrar formCheckIn
             $("#checkInButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
+                document.getElementById("buttons").style.display = "none";
                 setTimeout(function(){
                    $("#buttons").fadeOut(); 
                 },0);
                 setTimeout(function(){
                     $(".checkIn").fadeIn(400);
                     document.getElementById("checkInDiv").style.visibility = "visible";
+                    document.getElementById("checkInDiv").style.display = "block";
                 }, 450); 
             });
             $('#radioButtonRoomNewRoom').click(function(){
-                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-dark btn-dark";
-                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-dark btn-dark active";
+                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-outline-secondary";
+                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-outline-secondary active";
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
             });
             $('#radioButtonRoomExistingRoom').click(function(){
-                document.getElementById("radioButtonRoomNewRoom").className ="btn btn-dark btn-dark";
-                document.getElementById("radioButtonRoomExistingRoom").className ="btn btn-dark btn-dark active";
+                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-outline-secondary";
+                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-outline-secondary active";
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
@@ -144,7 +148,7 @@
             document.getElementById(id).placeholder=message;
         }
         function itsWell(id){
-            document.getElementById(id).style.backgroundColor="#343a40";
+            document.getElementById(id).style.className="col-md-6 btn btn-outline-secondary";
         }
         function distinctPassword(){
             pass1 = document.getElementById('checkInPassword').value;
