@@ -3,41 +3,44 @@
 {% block body %}
     <center id="buttons">
         </br>
-        <button id="loginButton" class="col-md-6 btn btn-outline-secondary">Iniciar sesion</button>
+        <button id="loginButton" class="col-md-6 btn btn-dark">Iniciar sesion</button>
         </br></br>
-        <button id="checkInButton" class="col-md-6 btn btn-outline-secondary">Registrarse</button>
+        <button id="checkInButton" class="col-md-6 btn btn-dark">Registrarse</button>
     </center>
     <center id="loginDiv">
         <form action="{{ path('login_check') }}" method="post" onsubmit="return validateLogIn()">
-            <input id="logInEmail" type="text" name="email" class="col-md-6 btn btn-outline-secondary" placeholder="Email" maxlength="50">
+            <input id="logInEmail" type="text" name="email" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
             </br></br>
-            <input id="logInPassword" type="password" name="password" class="col-md-6 btn btn-outline-secondary" placeholder="Contraseña" maxlength="20">
+            <input id="logInPassword" type="password" name="password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
             </br></br>
-            <input type="submit" class="col-md-6 btn btn-outline-secondary" value="Entrar">
+            <div id="behindSubmit" class="col-md-6  btn-group" data-toggle="buttons">
+                <button type="button" id="logInDivBack" class="col-md-6  btn btn-secondary">Atras</button>
+                <button type="submit" class="col-md-6  btn btn-success">Entrar</button>
+            </div>
         </form>
     </center>
     <center id="checkInDiv">
         <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm" onsubmit="return validateCheckIn()">
-            <input id="checkInEmail" type="text" name="email" class="col-md-6 btn btn-outline-secondary" placeholder="Email" maxlength="50">
+            <input id="checkInEmail" type="text" name="email" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
             </br></br>
-            <input id="checkInNickname" type="text" name="nickname" class="col-md-6 btn btn-outline-secondary" placeholder="Nombre de usuario" maxlength="20">
+            <input id="checkInNickname" type="text" name="nickname" class="col-md-6 btn btn-dark" placeholder="Nombre de usuario" maxlength="20" autocomplete="off">
             </br></br>
-            <input id="checkInPassword" type="password" name="password" class="col-md-6 btn btn-outline-secondary" placeholder="Contraseña" maxlength="20">
+            <input id="checkInPassword" type="password" name="password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
             </br></br>
-            <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="col-md-6 btn btn-outline-secondary" placeholder="Repite la contraseña" maxlength="20">
+            <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="col-md-6 btn btn-dark" placeholder="Repite la contraseña" maxlength="20" autocomplete="off">
             </br></br>
            <div id="radioButtonRoom" class="col-md-6  btn-group btn-group-toggle" data-toggle="buttons">
-                <label  id="radioButtonRoomExistingRoom" name="room" class="col-md-6  btn btn-outline-secondary active">
+                <label  id="radioButtonRoomExistingRoom" name="room" class="col-md-6  btn btn-dark active">
                     <input type="radio" name="room" autocomplete="off" checked>Sala existente 
                 </label>
-                <label id="radioButtonRoomNewRoom" name="room" class="col-md-6  btn btn-outline-secondary">
+                <label id="radioButtonRoomNewRoom" name="room" class="col-md-6  btn btn-dark">
                     <input type="radio" name="room" autocomplete="off">Nueva sala
                 </label>
             </div>
             </br></br>
             <div id="behindSubmit" class="col-md-6  btn-group" data-toggle="buttons">
-                <button class="col-md-6  btn btn-outline-secondary">Atras</button>
-                <button type="submit" class="col-md-6  btn btn-outline-secondary">Registrarse</button>
+                <button type="button" id="checkInDivBack" class="col-md-6  btn btn-secondary">Atras</button>
+                <button type="submit" class="col-md-6  btn btn-success" onSubmit("validateCheckIn()")>Registrarse</button>
             </div>
         </form>
     </center>
@@ -47,7 +50,7 @@
     {{ parent() }}
        <script>
         $(document).ready(function(){
-            //Mostrar formLogin
+            //Show formLogin
             $("#loginButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
                 document.getElementById("buttons").style.display= "none";
@@ -60,7 +63,7 @@
                     document.getElementById("loginDiv").style.display = "block";
                 }, 450); 
             });
-            //Mostrar formCheckIn
+            //Show formCheckIn
             $("#checkInButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
                 document.getElementById("buttons").style.display = "none";
@@ -73,53 +76,93 @@
                     document.getElementById("checkInDiv").style.display = "block";
                 }, 450); 
             });
+            //Come back buttons
+            $("#logInDivBack").click(function(){
+                document.getElementById("loginDiv").style.visibility = "hidden";
+                document.getElementById("loginDiv").style.display= "none";
+                setTimeout(function(){
+                    $("#loginDiv").fadeOut(); 
+                },0);
+                setTimeout(function(){
+                    $("#buttons").fadeIn(400);
+                    document.getElementById("buttons").style.visibility = "visible";
+                    document.getElementById("buttons").style.display = "block";
+                }, 450); 
+                document.getElementById("logInEmail").value="";
+                document.getElementById("logInPassword").value="";
+            });
+            $("#checkInDivBack").click(function(){
+                document.getElementById("checkInDiv").style.visibility = "hidden";
+                document.getElementById("checkInDiv").style.display= "none";
+                setTimeout(function(){
+                    $("#checkInDiv").fadeOut(); 
+                },0);
+                setTimeout(function(){
+                    $("#buttons").fadeIn(400);
+                    document.getElementById("buttons").style.visibility = "visible";
+                    document.getElementById("buttons").style.display = "block";
+                }, 450); 
+                document.getElementById("checkInEmail").value="";
+                document.getElementById("checkInNickname").value="";
+                document.getElementById("checkInPassword").value="";
+                document.getElementById("checkInRepeatPassword").value="";
+                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark";
+                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark active";
+                document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
+            });
+            //RadioButton choose room
             $('#radioButtonRoomNewRoom').click(function(){
-                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-outline-secondary";
-                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-outline-secondary active";
+                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark";
+                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark active";
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
             });
             $('#radioButtonRoomExistingRoom').click(function(){
-                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-outline-secondary";
-                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-outline-secondary active";
+                document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark";
+                document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark active";
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
             });
         });
+        //Validate checkIn inputs
         function validateCheckIn(){
             ready = true;
             if(notRightEmail("checkInEmail") || (document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50)){
-                itsWrong('checkInEmail', 'No es un email correcto');
+                itsWrong('checkInEmail', 'Email incorrecto');
                 ready=false;
             }
             else{
                 itsWell("checkInEmail");
             }
             if(document.getElementById('checkInNickname').value.length<3 || document.getElementById('checkInNickname').value.length>20){
-                itsWrong('checkInNickname', 'No es un nombre de usuario correcto');
+                itsWrong('checkInNickname', 'Nombre de usuario incorrecto');
                 ready=false;
             }
             else{
                 itsWell("checkInNickname");
             }
             if(notRightPassword('checkInPassword') || (document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20)){
-                itsWrong('checkInPassword', 'La contraseña debe tener minimo 8 caracteres');
+                itsWrong('checkInPassword', '8 o mas caracteres para la contraseña');
                 ready=false;
             }
             else{
                 itsWell("checkInPassword");
             }
+            if(distinctPassword()){
+                itsWrong('checkInPassword', 'Las contraseñas no coinciden');
+            }
             return ready;
         }
+        //Validate logIn inputs
         function validateLogIn(){
             ready = true;
             if(notRightEmail("logInEmail") || (document.getElementById("logInEmail").value.length<5 || document.getElementById("logInEmail").value.length>50)){
-                itsWrong('logInEmail', 'No es un email correcto');
+                itsWrong('logInEmail', 'Email incorrecto');
                 ready=false;
             }
             else{
                 itsWell("logInEmail");
             }
             if(notRightPassword('logInPassword') || (document.getElementById('logInPassword').value.length<8 && document.getElementById('logInPassword').value.length>20)){
-                itsWrong('logInPassword', 'No es una contraseña correcta');
+                itsWrong('logInPassword', 'Contraseña incorrecta');
                 ready=false;
             }
             else{
@@ -146,9 +189,10 @@
             document.getElementById(id).style.backgroundColor="#8B0000";
             document.getElementById(id).value="";
             document.getElementById(id).placeholder=message;
+            document.getElementById("checkInRepeatPassword").value="";
         }
         function itsWell(id){
-            document.getElementById(id).style.className="col-md-6 btn btn-outline-secondary";
+            document.getElementById(id).style.backgroundColor="#343a40";
         }
         function distinctPassword(){
             pass1 = document.getElementById('checkInPassword').value;
