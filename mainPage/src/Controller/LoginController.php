@@ -22,31 +22,31 @@ class LoginController extends Controller
         
         if(strlen($email)<5){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if(preg_match($pattern, $password)==1){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if(strlen($password)<8 || strlen($password)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if(preg_match($pattern, $nickname)==1){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if(strlen($nickname)<3 || strlen($nickname)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         if($where != 'newRoom' && $where != 'existingRoom'){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
 
         $users = $this->getDoctrine()
@@ -54,7 +54,7 @@ class LoginController extends Controller
         ->findByEmail($email);
         if(count($users)!=0){
             $session->getFlashBag()->add('warning', 'Esa direccion de correo ya esta registrada');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
         else{
             $user = new User();
@@ -67,7 +67,11 @@ class LoginController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
             $session->getFlashBag()->add('success', 'Has completado tu registro con exito');
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
+    }
+
+    public function login_check(){
+
     }
 }

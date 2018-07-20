@@ -1,4 +1,4 @@
-index:
+login:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
