@@ -8,6 +8,12 @@
                 {{ flashMessage }}
             </div>
         {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            </br>
+            <div class="alert alert-success" role="alert">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
     </div>
     <center id="buttons">
         </br>
@@ -58,6 +64,8 @@
     {{ parent() }}
        <script>
         $(document).ready(function(){
+            //Timeout for possible alerts
+            setTimeout(function() {document.getElementById("alert").innerHTML = "";}, 3000);
             //Show formLogin
             $("#loginButton").click(function(){
                 document.getElementById("buttons").style.visibility = "hidden";
@@ -185,7 +193,7 @@
             return ready;
         }
         //Validate logIn inputs
-        function validateLogIn(){
+        /*function validateLogIn(){
             ready = true;
             var inputs = [];
             var messages = [];
@@ -260,6 +268,6 @@
             password = document.getElementById(id).value;
             if(pattern.test(password)) return true;
             else return false;
-        }
+        }*/
     </script>
 {% endblock %}

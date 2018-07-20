@@ -18,6 +18,7 @@ class LoginController extends Controller
 
         $session = new Session();
         $session->start();
+        $pattern = "/[^\w.]+/";
         
         if(strlen($email)<5){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
@@ -27,12 +28,18 @@ class LoginController extends Controller
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
             return $this->redirectToRoute('index');
         }
-        //Comprobacion tipografia password
+        if(preg_match($pattern, $password)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
+            return $this->redirectToRoute('index');
+        }
         if(strlen($password)<8 || strlen($password)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
             return $this->redirectToRoute('index');
         }
-        //Comprobacion tipografia username
+        if(preg_match($pattern, $nickname)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
+            return $this->redirectToRoute('index');
+        }
         if(strlen($nickname)<3 || strlen($nickname)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
             return $this->redirectToRoute('index');
@@ -59,15 +66,8 @@ class LoginController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            if($where == 'existingRoom'){
-                return new Response("You're going to join in a existing room");
-            }
-            else if($where == 'newRoom'){
-                return new Response("You're going to create a new room");
-            }
-            else{
-                return new Response("There has been an error, you're going back to welcome page");
-            }
+            $session->getFlashBag()->add('success', 'Has completado tu registro con exito');
+            return $this->redirectToRoute('index');
         }
     }
 }
