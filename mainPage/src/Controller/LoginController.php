@@ -42,8 +42,6 @@ class LoginController extends Controller
             return $this->redirectToRoute('index');
         }
 
-
-
         $users = $this->getDoctrine()
         ->getRepository(User::class)
         ->findByEmail($email);

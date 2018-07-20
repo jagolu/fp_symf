@@ -3,6 +3,10 @@ body{
     padding-right:5%;
     padding-left: 5%;
 }
+.fixed-bottom{
+    padding-right:5%;
+    padding-left: 5%;
+}
 #buttons{
     padding-top:15%;
     display: block;

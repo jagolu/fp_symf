@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div id="alert">
+    <div id="alert" class="fixed-bottom">
         {% for flashMessage in app.session.flashbag.get('warning') %}
             </br>
             <div class="alert alert-danger" role="alert">
@@ -139,53 +139,81 @@
         //Validate checkIn inputs
         function validateCheckIn(){
             ready = true;
-            if(notRightEmail("checkInEmail") || (document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50)){
-                itsWrong('checkInEmail', 'Email incorrecto');
+            var inputs = [];
+            var messages = [];
+            if(notRightEmail("checkInEmail")){
+                inputs.push("checkInEmail");
+                messages.push("- Email no valido");
                 ready=false;
+            }
+            if(document.getElementById("checkInEmail").value.length<5 || document.getElementById("checkInEmail").value.length>50){
+                if(inputs.length == 0){
+                    inputs.push("checkInEmail");
+                    messages.push("- Email no valido");
+                    ready=false;
+                }
             }
             else itsWell("checkInEmail");
             if(document.getElementById('checkInNickname').value.length<3 || document.getElementById('checkInNickname').value.length>20){
-                itsWrong('checkInNickname', 'Nombre de usuario incorrecto');
+                inputs.push("checkInNickname");
+                messages.push("- El nickname debe tener entre 3 y 20 caracteres");
                 ready=false;
             }
             else itsWell("checkInNickname");
             if(distinctPassword()){
-                itsWrong('checkInPassword', 'Las contraseñas no coinciden');
+                inputs.push("checkInPassword");
+                messages.push("- Las contraseñas no coinciden");
+                ready=false;
             }
-            if(notRightPassword('checkInPassword') || (document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20)){
-                itsWrong('checkInPassword', '8 o mas caracteres para la contraseña');
+            if(document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20){
+                inputs.push("checkInPassword");
+                messages.push("- La contraseña debe estar entre 8 y 20 caracteres");
                 ready=false;
             }
             else itsWell("checkInPassword");
             if(rightChar("checkInPassword")){
-                itsWrong('checkInPassword', 'Caracteres no admitidos');
+                inputs.push("checkInPassword");
+                messages.push("- La contraseña solo permite letras, numeros, guiones, puntos, barras bajas y espacios");
                 ready=false;
             }
             if(rightChar("checkInNickname")){
-                itsWrong('checkInNickname', 'Caracteres no admitidos');
+                inputs.push("checkInNickname");
+                messages.push("- El nickname solo permite letras, numeros, guiones, puntos, barras bajas y espacios");
                 ready=false;
             }
+            if(!ready) itsWrong(inputs, messages);
             return ready;
         }
         //Validate logIn inputs
         function validateLogIn(){
             ready = true;
-            i = 0;
-            if(notRightEmail("logInEmail") || (document.getElementById("logInEmail").value.length<5 || document.getElementById("logInEmail").value.length>50)){
-                //itsWrong('logInEmail', 'Email incorrecto');
-                ids[i] = "logInEmail";
+            var inputs = [];
+            var messages = [];
+            if(notRightEmail("logInEmail")){
+                inputs.push("logInEmail");
+                messages.push("- Email no valido");
                 ready=false;
             }
+            if(document.getElementById("logInEmail").value.length<5 || document.getElementById("logInEmail").value.length>50){
+                if(inputs.length == 0){
+                    inputs.push("logInEmail");
+                    messages.push("- Email no valido");
+                    ready=false;
+                }
+            }
             else itsWell("logInEmail");
-            if(notRightPassword('logInPassword') || (document.getElementById('logInPassword').value.length<8 && document.getElementById('logInPassword').value.length>20)){
-                itsWrong('logInPassword', 'Contraseña incorrecta');
+            if(document.getElementById('logInPassword').value.length<8 || document.getElementById('logInPassword').value.length>20){
+                inputs.push("logInPassword");
+                messages.push("- La contraseña debe estar entre 8 y 20 caracteres");
                 ready=false;
             }
             else itsWell("logInPassword");
             if(rightChar("logInPassword")){
-                itsWrong('logInPassword', 'Contraseña incorrecta');
+                inputs.push("checkInPassword");
+                messages.push("- Requerda que la contraseña solo permite letras, numeros, guiones, puntos, barras bajas y espacios");
                 ready=false;
             }
+            if(!ready) itsWrong(inputs, messages);
             return ready;
         }
         function notRightEmail(id){
@@ -201,19 +229,22 @@
                 return true;
             }
         }
-        function notRightPassword(id){
-            long = document.getElementById(id).length;
-            if(long<8) return true;
-            else return false;
-        }
         function itsWrong(id, message){
-            document.getElementById(id).style.backgroundColor="#8B0000";
-            document.getElementById(id).value="";
-            //document.getElementById(id).placeholder=message;
+            messages = "";
+            for(i=0; i<id.length; i++){
+                document.getElementById(id[i]).style.backgroundColor="#8B0000";
+                document.getElementById(id[i]).value="";
+                messages = messages.concat("</br>");
+                messages = messages.concat(message[i]);
+            }
             document.getElementById("checkInRepeatPassword").value="";
             document.getElementById("checkInPassword").value="";
             document.getElementById("logInPassword").value="";
-            setTimeout(function() { document.write(message); }, 5000);
+            alert = "<div class=\"alert alert-danger\" role=\"alert\">";
+            alert = alert.concat(messages);
+            alert = alert.concat("</br></br></div>");
+            document.getElementById("alert").innerHTML = alert;
+            setTimeout(function() {document.getElementById("alert").innerHTML = "";}, 3000);
         }
         function itsWell(id){
             document.getElementById(id).style.backgroundColor="#343a40";
