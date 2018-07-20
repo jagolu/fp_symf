@@ -1,6 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+    <div id="alert">
+        {% for flashMessage in app.session.flashbag.get('warning') %}
+            </br>
+            <div class="alert alert-danger" role="alert">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
     <center id="buttons">
         </br>
         <button id="loginButton" class="col-md-6 btn btn-dark">Iniciar sesion</button>
@@ -90,6 +98,8 @@
                 }, 450); 
                 document.getElementById("logInEmail").value="";
                 document.getElementById("logInPassword").value="";
+                itsWell('logInEmail');
+                itsWell('logInPassword');
             });
             $("#checkInDivBack").click(function(){
                 document.getElementById("checkInDiv").style.visibility = "hidden";
@@ -106,6 +116,10 @@
                 document.getElementById("checkInNickname").value="";
                 document.getElementById("checkInPassword").value="";
                 document.getElementById("checkInRepeatPassword").value="";
+                itsWell('checkInEmail');
+                itsWell('checkInNickname');
+                itsWell('checkInPassword');
+                itsWell('checkInRepeatPassword');
                 document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark";
                 document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark active";
                 document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
@@ -129,49 +143,56 @@
                 itsWrong('checkInEmail', 'Email incorrecto');
                 ready=false;
             }
-            else{
-                itsWell("checkInEmail");
-            }
+            else itsWell("checkInEmail");
             if(document.getElementById('checkInNickname').value.length<3 || document.getElementById('checkInNickname').value.length>20){
                 itsWrong('checkInNickname', 'Nombre de usuario incorrecto');
                 ready=false;
             }
-            else{
-                itsWell("checkInNickname");
+            else itsWell("checkInNickname");
+            if(distinctPassword()){
+                itsWrong('checkInPassword', 'Las contraseñas no coinciden');
             }
             if(notRightPassword('checkInPassword') || (document.getElementById('checkInPassword').value.length<8 || document.getElementById('checkInPassword').value.length>20)){
                 itsWrong('checkInPassword', '8 o mas caracteres para la contraseña');
                 ready=false;
             }
-            else{
-                itsWell("checkInPassword");
+            else itsWell("checkInPassword");
+            if(rightChar("checkInPassword")){
+                itsWrong('checkInPassword', 'Caracteres no admitidos');
+                ready=false;
             }
-            if(distinctPassword()){
-                itsWrong('checkInPassword', 'Las contraseñas no coinciden');
+            if(rightChar("checkInNickname")){
+                itsWrong('checkInNickname', 'Caracteres no admitidos');
+                ready=false;
             }
             return ready;
         }
         //Validate logIn inputs
         function validateLogIn(){
             ready = true;
+            i = 0;
             if(notRightEmail("logInEmail") || (document.getElementById("logInEmail").value.length<5 || document.getElementById("logInEmail").value.length>50)){
-                itsWrong('logInEmail', 'Email incorrecto');
+                //itsWrong('logInEmail', 'Email incorrecto');
+                ids[i] = "logInEmail";
                 ready=false;
             }
-            else{
-                itsWell("logInEmail");
-            }
+            else itsWell("logInEmail");
             if(notRightPassword('logInPassword') || (document.getElementById('logInPassword').value.length<8 && document.getElementById('logInPassword').value.length>20)){
                 itsWrong('logInPassword', 'Contraseña incorrecta');
                 ready=false;
             }
-            else{
-                itsWell("logInPassword");
+            else itsWell("logInPassword");
+            if(rightChar("logInPassword")){
+                itsWrong('logInPassword', 'Contraseña incorrecta');
+                ready=false;
             }
             return ready;
         }
         function notRightEmail(id){
             campo = document.getElementById(id).value;
+            if(campo.length<5){
+                return false;
+            }
             emailRegex =/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
             if (emailRegex.test(campo)) {
                 return false;
@@ -188,8 +209,11 @@
         function itsWrong(id, message){
             document.getElementById(id).style.backgroundColor="#8B0000";
             document.getElementById(id).value="";
-            document.getElementById(id).placeholder=message;
+            //document.getElementById(id).placeholder=message;
             document.getElementById("checkInRepeatPassword").value="";
+            document.getElementById("checkInPassword").value="";
+            document.getElementById("logInPassword").value="";
+            setTimeout(function() { document.write(message); }, 5000);
         }
         function itsWell(id){
             document.getElementById(id).style.backgroundColor="#343a40";
@@ -198,6 +222,12 @@
             pass1 = document.getElementById('checkInPassword').value;
             pass2 = document.getElementById('checkInRepeatPassword').value;
             if(pass1 != pass2) return true;
+            else return false;
+        }
+        function rightChar(id){
+            pattern =/[^\w.]+/;
+            password = document.getElementById(id).value;
+            if(pattern.test(password)) return true;
             else return false;
         }
     </script>
