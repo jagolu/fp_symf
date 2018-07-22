@@ -65,20 +65,6 @@ $(document).ready(function(){
         itsWell('checkInNickname');
         itsWell('checkInPassword');
         itsWell('checkInRepeatPassword');
-        document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark";
-        document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark active";
-        document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
-    });
-    //RadioButton choose room
-    $('#radioButtonRoomNewRoom').click(function(){
-        document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark";
-        document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark active";
-        document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'newRoom'}) }}";
-    });
-    $('#radioButtonRoomExistingRoom').click(function(){
-        document.getElementById("radioButtonRoomNewRoom").className ="col-md-6  btn btn-dark";
-        document.getElementById("radioButtonRoomExistingRoom").className ="col-md-6  btn btn-dark active";
-        document.getElementById("checkInForm").action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}";
     });
 });
 //Validate checkIn inputs

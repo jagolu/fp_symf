@@ -11,7 +11,7 @@ use App\Entity\User;
 
 class LoginController extends Controller
 {
-    public function checkBeforeRoom($where){
+    public function checkBeforeRoom(){
         $email = $_POST['email'];
         $nickname = $_POST['nickname'];
         $password = $_POST['password'];
@@ -41,10 +41,6 @@ class LoginController extends Controller
             return $this->redirectToRoute('login');
         }
         if(strlen($nickname)<3 || strlen($nickname)>20){
-            $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
-        }
-        if($where != 'newRoom' && $where != 'existingRoom'){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
             return $this->redirectToRoute('login');
         }
