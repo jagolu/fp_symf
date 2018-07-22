@@ -67,6 +67,10 @@ class LoginController extends Controller
         }
     }
 
+    public function rememberPassword(){
+        
+    }
+
     public function login_check(){
 
     }

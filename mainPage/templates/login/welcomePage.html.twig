@@ -3,49 +3,61 @@
 {% block body %}
     <div id="alert" class="fixed-bottom">
         {% for flashMessage in app.session.flashbag.get('warning') %}
-            </br>
+            <br/>
             <div class="alert alert-danger" role="alert">
                 {{ flashMessage }}
             </div>
         {% endfor %}
         {% for flashMessage in app.session.flashbag.get('success') %}
-            </br>
+            <br/>
             <div class="alert alert-success" role="alert">
                 {{ flashMessage }}
             </div>
         {% endfor %}
     </div>
     <center id="buttons">
-        </br>
+        <br/>
         <button id="loginButton" class="col-md-6 btn btn-dark">Iniciar sesion</button>
-        </br></br>
+        <br/><br/>
         <button id="checkInButton" class="col-md-6 btn btn-dark">Registrarse</button>
     </center>
     <center id="loginDiv">
         <form action="{{ path('login_check') }}" method="post" onsubmit="return validateLogIn()">
             <input id="logInEmail" type="text" name="email" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
-            </br></br>
+            <br/><br/>
             <input id="logInPassword" type="password" name="password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
-            </br></br>
-            <div id="behindSubmit" class="col-md-6  btn-group" data-toggle="buttons">
+            <br/><br/>
+            <div class="col-md-6  btn-group" data-toggle="buttons">
                 <button type="button" id="logInDivBack" class="col-md-6  btn btn-secondary">Atras</button>
                 <button type="submit" class="col-md-6  btn btn-success">Entrar</button>
             </div>
+            <br/><br/>
+            <button id="rememberPasswordButton" type="button" class="col-md-1.5 btn btn-secondary">Recordar contraseña</button>
         </form>
     </center>
     <center id="checkInDiv">
-        <form action="{{ path('checkBeforeRoom',{'where': 'existingRoom'}) }}" method="post" id="checkInForm" onsubmit="return validateCheckIn()">
+        <form action="{{ path('checkBeforeRoom') }}" method="post" onsubmit="return validateCheckIn()">
             <input id="checkInEmail" type="text" name="email" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
-            </br></br>
+            <br/><br/>
             <input id="checkInNickname" type="text" name="nickname" class="col-md-6 btn btn-dark" placeholder="Nombre de usuario" maxlength="20" autocomplete="off">
-            </br></br>
+            <br/><br/>
             <input id="checkInPassword" type="password" name="password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
-            </br></br>
+            <br/><br/>
             <input id="checkInRepeatPassword" type="password" name="repeatPassword" class="col-md-6 btn btn-dark" placeholder="Repite la contraseña" maxlength="20" autocomplete="off">
-            </br></br>
-            <div id="behindSubmit" class="col-md-6  btn-group" data-toggle="buttons">
+            <br/><br/>
+            <div class="col-md-6  btn-group" data-toggle="buttons">
                 <button type="button" id="checkInDivBack" class="col-md-6  btn btn-secondary">Atras</button>
-                <button type="submit" class="col-md-6  btn btn-success" onSubmit("validateCheckIn()")>Registrarse</button>
+                <button type="submit" class="col-md-6  btn btn-success">Registrarse</button>
+            </div>
+        </form>
+    </center>
+    <center id="rememberPassword">   
+        <form action="{{ path('rememberPassword') }}" method="post" onSubmit="return validateRemember()">
+            <input id="rememberPasswordEmail" type="text" name="myEmail" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
+            <br/><br/>
+            <div class="col-md-6  btn-group" data-toggle="buttons">
+                <button type="button" id="rememberDivBack" class="col-md-6  btn btn-secondary">Atras</button>
+                <button type="submit" class="col-md-6  btn btn-success">Recordar</button>
             </div>
         </form>
     </center>

@@ -11,7 +11,7 @@ $(document).ready(function(){
             $("#buttons").fadeOut(); 
         },0);
         setTimeout(function(){
-            $(".logIn").fadeIn(400);
+            $("#loginDiv").fadeIn(400);
             document.getElementById("loginDiv").style.visibility = "visible";
             document.getElementById("loginDiv").style.display = "block";
         }, 450); 
@@ -24,9 +24,22 @@ $(document).ready(function(){
             $("#buttons").fadeOut(); 
         },0);
         setTimeout(function(){
-            $(".checkIn").fadeIn(400);
+            $("#checkInDiv").fadeIn(400);
             document.getElementById("checkInDiv").style.visibility = "visible";
             document.getElementById("checkInDiv").style.display = "block";
+        }, 450); 
+    });
+    //Show rememberPassword
+    $("#rememberPasswordButton").click(function(){
+        document.getElementById("loginDiv").style.visibility = "hidden";
+        document.getElementById("loginDiv").style.display= "none";
+        setTimeout(function(){
+            $("#loginDiv").fadeOut(); 
+        },0);
+        setTimeout(function(){
+            $("#rememberPassword").fadeIn(400);
+            document.getElementById("rememberPassword").style.visibility = "visible";
+            document.getElementById("rememberPassword").style.display = "block";
         }, 450); 
     });
     //Come back buttons
@@ -65,6 +78,20 @@ $(document).ready(function(){
         itsWell('checkInNickname');
         itsWell('checkInPassword');
         itsWell('checkInRepeatPassword');
+    });
+    $("#rememberDivBack").click(function(){
+        document.getElementById("rememberPassword").style.visibility = "hidden";
+        document.getElementById("rememberPassword").style.display= "none";
+        setTimeout(function(){
+            $("#rememberPassword").fadeOut(); 
+        },0);
+        setTimeout(function(){
+            $("#loginDiv").fadeIn(400);
+            document.getElementById("loginDiv").style.visibility = "visible";
+            document.getElementById("loginDiv").style.display = "block";
+        }, 450); 
+        document.getElementById("rememberPasswordEmail").value="";
+        itsWell('rememberPasswordEmail');
     });
 });
 //Validate checkIn inputs
@@ -143,6 +170,26 @@ function validateLogIn(){
         inputs.push("checkInPassword");
         messages.push("- Requerda que la contraseña solo permite letras, numeros, guiones, puntos, barras bajas y espacios");
         ready=false;
+    }
+    if(!ready) itsWrong(inputs, messages);
+    return ready;
+}
+//Validate remember
+function validateRemember(){
+    ready = true;
+    var inputs = [];
+    var messages = [];
+    if(notRightEmail("rememberPasswordEmail")){
+        inputs.push("rememberPasswordEmail");
+        messages.push("- Email no valido");
+        ready=false;
+    }
+    if(document.getElementById("rememberPasswordEmail").value.length<5 || document.getElementById("rememberPasswordEmail").value.length>50){
+        if(inputs.length == 0){
+            inputs.push("rememberPasswordEmail");
+            messages.push("- Email no valido");
+            ready=false;
+        }
     }
     if(!ready) itsWrong(inputs, messages);
     return ready;
