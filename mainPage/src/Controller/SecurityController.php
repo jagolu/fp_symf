@@ -74,4 +74,8 @@ class SecurityController extends Controller
     public function login(){
 
     }
+
+    public function index(){
+        return new Response('hola caracola');
+    }
 }

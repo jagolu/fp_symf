@@ -22,6 +22,9 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                default_target_path: index
+                always_use_default_target_path: true
+                failure_path: welcome
 
             # activate different ways to authenticate
 

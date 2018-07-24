@@ -9,6 +9,9 @@ login:
 checkBeforeRoom:
   path: /checkBeforeRoom
   controller: App\Controller\SecurityController::checkBeforeRoom
+index:
+  path: /index
+  controller: App\Controller\SecurityController::index
 new_room:
   path: /newRoom
   controller: App\Controller\SecurityController::newRoom
