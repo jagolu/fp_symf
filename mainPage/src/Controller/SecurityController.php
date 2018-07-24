@@ -76,6 +76,12 @@ class SecurityController extends Controller
     }
 
     public function index(){
+        $session = new Session();
+        $session->start();
+        $this->session = $session;
+        $this->router = $container->get('router');
+        $this->securityContext = $container->get('security.context');
+        $this->get('security.context')->getToken()->getUser();
         return new Response('hola caracola');
     }
 }
