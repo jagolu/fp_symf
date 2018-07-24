@@ -24,7 +24,7 @@ class Teams
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=50, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=30, nullable=false)
      */
     private $nombre;
 
