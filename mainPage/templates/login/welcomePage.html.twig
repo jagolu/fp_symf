@@ -22,10 +22,10 @@
         <button id="checkInButton" class="col-md-6 btn btn-dark">Registrarse</button>
     </center>
     <center id="loginDiv">
-        <form action="{{ path('login_check') }}" method="post" onsubmit="return validateLogIn()">
-            <input id="logInEmail" type="text" name="email" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
+        <form action="{{ path('login') }}" method="post" onsubmit="return validateLogIn()">
+            <input id="logInEmail" type="text" name="_username" class="col-md-6 btn btn-dark" placeholder="Email" maxlength="50" autocomplete="off">
             <br/><br/>
-            <input id="logInPassword" type="password" name="password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
+            <input id="logInPassword" type="password" name="_password" class="col-md-6 btn btn-dark" placeholder="Contraseña" maxlength="20" autocomplete="off">
             <br/><br/>
             <div class="col-md-6  btn-group" data-toggle="buttons">
                 <button type="button" id="logInDivBack" class="col-md-6  btn btn-secondary">Atras</button>
