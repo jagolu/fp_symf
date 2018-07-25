@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", indexes={@ORM\Index(name="id_user", columns={"id_user"})})
  * @ORM\Entity
  */
 class User implements UserInterface, \Serializable
@@ -25,21 +27,21 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=100, nullable=false)
+     * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nickname", type="string", length=20, nullable=false)
+     * @ORM\Column(name="nickname", type="string", length=30, nullable=false)
      */
     private $nickname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=500, nullable=false)
+     * @ORM\Column(name="password", type="string", length=100, nullable=false)
      */
     private $password;
 
@@ -48,12 +50,28 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Room", inversedBy="user")
+     * @ORM\JoinTable(name="user_room",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id_user")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="room_id", referencedColumnName="id_room")
+     *   }
+     * )
+     */
+    private $room;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
+        $this->isActive = false;
+        $this->room = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getIdUser(): ?int
@@ -97,7 +115,31 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getUsername()
+    /**
+     * @return Collection|Room[]
+     */
+    public function getRoom(): Collection
+    {
+        return $this->room;
+    }
+
+    public function addRoom(Room $room): self
+    {
+        if (!$this->room->contains($room)) {
+            $this->room[] = $room;
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Room $room): self
+    {
+        if ($this->room->contains($room)) {
+            $this->room->removeElement($room);
+        }
+
+        return $this;
+    }public function getUsername()
     {
         return $this->email;
     }
@@ -143,4 +185,5 @@ class User implements UserInterface, \Serializable
             // $this->salt
         ) = unserialize($serialized, array('allowed_classes' => false));
     }
+
 }

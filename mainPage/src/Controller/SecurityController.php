@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\HttpFoundation\Session\Session;
 use App\Entity\User;
 
-class LoginController extends Controller
+class SecurityController extends Controller
 {
     public function checkBeforeRoom(){
         $email = $_POST['email'];
@@ -22,27 +22,27 @@ class LoginController extends Controller
         
         if(strlen($email)<5){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         if(preg_match($pattern, $password)==1){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         if(strlen($password)<8 || strlen($password)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         if(preg_match($pattern, $nickname)==1){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         if(strlen($nickname)<3 || strlen($nickname)>20){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
 
         $users = $this->getDoctrine()
@@ -50,7 +50,7 @@ class LoginController extends Controller
         ->findByEmail($email);
         if(count($users)!=0){
             $session->getFlashBag()->add('warning', 'Esa direccion de correo ya esta registrada');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
         else{
             $user = new User();
@@ -63,7 +63,7 @@ class LoginController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
             $session->getFlashBag()->add('success', 'Has completado tu registro con exito');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('welcome');
         }
     }
 
@@ -71,7 +71,17 @@ class LoginController extends Controller
         
     }
 
-    public function login_check(){
+    public function login(){
 
+    }
+
+    public function index(){
+        $session = new Session();
+        $session->start();
+        $this->session = $session;
+        $this->router = $container->get('router');
+        $this->securityContext = $container->get('security.context');
+        $this->get('security.context')->getToken()->getUser();
+        return new Response('hola caracola');
     }
 }

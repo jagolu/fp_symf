@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Room
  *
- * @ORM\Table(name="room")
+ * @ORM\Table(name="room", indexes={@ORM\Index(name="id_room", columns={"id_room"})})
  * @ORM\Entity
  */
 class Room
@@ -36,18 +38,26 @@ class Room
     private $type;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_begin", type="date", nullable=false)
-     */
-    private $dateBegin;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
      */
     private $name;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="room")
+     */
+    private $user;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getIdRoom(): ?int
     {
@@ -78,18 +88,6 @@ class Room
         return $this;
     }
 
-    public function getDateBegin(): ?\DateTimeInterface
-    {
-        return $this->dateBegin;
-    }
-
-    public function setDateBegin(\DateTimeInterface $dateBegin): self
-    {
-        $this->dateBegin = $dateBegin;
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -102,5 +100,32 @@ class Room
         return $this;
     }
 
+    /**
+     * @return Collection|User[]
+     */
+    public function getUser(): Collection
+    {
+        return $this->user;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->user->contains($user)) {
+            $this->user[] = $user;
+            $user->addRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->user->contains($user)) {
+            $this->user->removeElement($user);
+            $user->removeRoom($this);
+        }
+
+        return $this;
+    }
 
 }

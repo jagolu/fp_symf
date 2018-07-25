@@ -1,20 +1,23 @@
-login:
+welcome:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
       template: login/welcomePage.html.twig
-login_check:
+login:
   path: /login
-  controller: App\Controller\LoginController::login_check
+  controller: App\Controller\SecurityController::login_check
 checkBeforeRoom:
   path: /checkBeforeRoom
-  controller: App\Controller\LoginController::checkBeforeRoom
+  controller: App\Controller\SecurityController::checkBeforeRoom
+index:
+  path: /index
+  controller: App\Controller\SecurityController::index
 new_room:
   path: /newRoom
-  controller: App\Controller\LoginController::newRoom
+  controller: App\Controller\SecurityController::newRoom
 join_room:
   path: /joinRoom
-  controller: App\Controller\LoginController::joinRoom
+  controller: App\Controller\SecurityController::joinRoom
 rememberPassword:
   path: /rememberPassword
-  controller: App\Controller\LoginController::rememberPassword
+  controller: App\Controller\SecurityController::rememberPassword
