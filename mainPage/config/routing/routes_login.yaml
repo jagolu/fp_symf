@@ -9,15 +9,19 @@ login:
 checkBeforeRoom:
   path: /checkBeforeRoom
   controller: App\Controller\SecurityController::checkBeforeRoom
+newRoom:
+  path: /newRoom
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+    template: login/newRoom.html.twig
+joinRoom:
+  path: /joinRoom
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+    template: login/joinRoom.html.twig
 index:
   path: /index
   controller: App\Controller\SecurityController::index
-new_room:
-  path: /newRoom
-  controller: App\Controller\SecurityController::newRoom
-join_room:
-  path: /joinRoom
-  controller: App\Controller\SecurityController::joinRoom
 rememberPassword:
   path: /rememberPassword
   controller: App\Controller\SecurityController::rememberPassword

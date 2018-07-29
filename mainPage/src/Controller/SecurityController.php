@@ -17,7 +17,11 @@ class SecurityController extends Controller
         $password = $_POST['password'];
 
         $session = new Session();
-        $session->start();
+        if(!$this->container->get('session')->isStarted()) $session->start();
+        else{
+            $session->invalidate();
+            $session->start();
+        } 
         $pattern = "/[^\w.]+/";
         
         if(strlen($email)<5){
@@ -62,8 +66,13 @@ class SecurityController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            $session->getFlashBag()->add('success', 'Has completado tu registro con exito');
-            return $this->redirectToRoute('welcome');
+            $session->setName($email);
+            $session->set('email', $email);
+            $session->set('nickname', $nickname);
+            $session->set('password', $password);
+            //$session->getFlashBag()->add('success', 'Has completado tu registro con exito');
+            //return $this->redirectToRoute('welcome');
+            return $this->render('login/chooseNewOrExistingRoom.html.twig');
         }
     }
 
