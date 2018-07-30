@@ -8,12 +8,6 @@
                 {{ flashMessage }}
             </div>
         {% endfor %}
-        {% for flashMessage in app.session.flashbag.get('success') %}
-            <br/>
-            <div class="alert alert-success" role="alert">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
     </div>
     <center id="buttons">
         <br/>

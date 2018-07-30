@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use App\Entity\User;
 
 class SecurityController extends Controller
@@ -15,14 +16,16 @@ class SecurityController extends Controller
         $email = $_POST['email'];
         $nickname = $_POST['nickname'];
         $password = $_POST['password'];
+        $pattern = "/[^\w.]+/";
 
         $session = new Session();
-        if(!$this->container->get('session')->isStarted()) $session->start();
+        if(!$this->container->get('session')->isStarted()){
+            $session->start();
+        }
         else{
             $session->invalidate();
             $session->start();
         } 
-        $pattern = "/[^\w.]+/";
         
         if(strlen($email)<5){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
@@ -66,12 +69,11 @@ class SecurityController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            $session->setName($email);
-            $session->set('email', $email);
-            $session->set('nickname', $nickname);
-            $session->set('password', $password);
-            //$session->getFlashBag()->add('success', 'Has completado tu registro con exito');
-            //return $this->redirectToRoute('welcome');
+            //Here I serialize the symfony session with the user data
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+            //End of the serialize part
             return $this->render('login/chooseNewOrExistingRoom.html.twig');
         }
     }
@@ -86,11 +88,18 @@ class SecurityController extends Controller
 
     public function index(){
         $session = new Session();
-        $session->start();
-        $this->session = $session;
-        $this->router = $container->get('router');
-        $this->securityContext = $container->get('security.context');
-        $this->get('security.context')->getToken()->getUser();
-        return new Response('hola caracola');
+        if(!$this->container->get('session')->isStarted()){
+            $session->start();
+        }
+        else{
+            $session->invalidate();
+            $session->start();
+        } 
+        $text = "Te has registrado con: </br>";
+        $text = $text . $this->getUser()->getIdUser() .'</br>';
+        $text = $text . $this->getUser()->getEmail() .'</br>';
+        $text = $text . $this->getUser()->getNickname() .'</br>';
+        $text = $text . $this->getUser()->getPassword() .'</br>';
+        return new Response($text);
     }
 }
