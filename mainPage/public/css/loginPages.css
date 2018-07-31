@@ -1,3 +1,4 @@
+/*General*/
 body{
     background-color: #EEE;
     padding-right:5%;
@@ -7,10 +8,23 @@ body{
     padding-right:5%;
     padding-left: 5%;
 }
-#buttons{
+input::placeholder{
+    color: white;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #343a40 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+
+/*WelcomePage & newRoom*/
+#buttons, #createRoomDiv{
     padding-top:15%;
     display: block;
 }
+
+
+/*WelcomePage*/
 #loginDiv{
     padding-top:16.4%;
     display:none; 
@@ -26,10 +40,8 @@ body{
     display: none;
     visibility: hidden;
 }
-input::placeholder{
-    color: white;
-}
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #343a40 inset !important;
-    -webkit-text-fill-color: white !important;
+
+/*newRoom*/
+#hrefButton{
+    padding: 0;
 }

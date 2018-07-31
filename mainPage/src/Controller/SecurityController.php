@@ -86,6 +86,20 @@ class SecurityController extends Controller
 
     }
 
+    public function createNewRoom(){
+        $room = $_POST['roomName'];
+        $password = $_POST['password'];
+        $repeatPassword = $_POST['repeatPassword'];
+        if(isset($_POST['liga'])) $liga = true;
+        else $liga = false;
+        if(isset($_POST['champions'])) $champions = true;
+        else $champions = false;
+        if(isset($_POST['cup'])) $cup = true;
+        else $cup = false;
+        $text = $room . '</br>' .$password . '</br>' .$repeatPassword . '</br>' .$liga .'</br>' .$champions .'</br>' . $cup;
+        return new Response($text);
+    }
+
     public function index(){
         $session = new Session();
         if(!$this->container->get('session')->isStarted()){
