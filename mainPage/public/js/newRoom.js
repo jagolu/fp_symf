@@ -41,7 +41,7 @@ function validateCreateRoom(){
         messages.push("- Las contraseñas no coinciden");
         ready=false;
     }
-    if(document.getElementById('password').value.length<8 || document.getElementById('checkInPassword').value.length>20){
+    if(document.getElementById('password').value.length<8 || document.getElementById('password').value.length>20){
         inputs.push("password");
         messages.push("- La contraseña debe estar entre 8 y 20 caracteres");
         ready=false;
@@ -55,6 +55,10 @@ function validateCreateRoom(){
     if(rightChar("nameRoom")){
         inputs.push("nameRoom");
         messages.push("- El nombre de sala solo permite letras, numeros, guiones, puntos, barras bajas y espacios");
+        ready=false;
+    }
+    if(nothingChecked()){
+        messages.push('- Debe elegir almenos 1 opcion entre liga, champions o copa');
         ready=false;
     }
     if(!ready) itsWrong(inputs, messages);
@@ -74,6 +78,10 @@ function itsWrong(id, message){
         messages = messages.concat("</br>");
         messages = messages.concat(message[i]);
     }
+    if(id.length<messages.length){
+        messages = messages.concat("</br>");
+        messages = messages.concat(message[message.length-1]);
+    }
     document.getElementById("repeatPassword").value="";
     document.getElementById("password").value="";
     alert = "<div class=\"alert alert-danger\" role=\"alert\">";
@@ -90,4 +98,14 @@ function rightChar(id){
     password = document.getElementById(id).value;
     if(pattern.test(password)) return true;
     else return false;
+}
+function nothingChecked(){
+    if(document.getElementById('leagueInput').checked==false && 
+       document.getElementById('championsInput').checked==false && 
+       document.getElementById('cupInput').checked==false){
+        return true;
+    }
+    else{
+        return false;
+    }
 }

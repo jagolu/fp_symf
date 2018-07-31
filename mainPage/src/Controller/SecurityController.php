@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use App\Entity\User;
+use App\Entity\Room;
 
 class SecurityController extends Controller
 {
@@ -87,17 +88,81 @@ class SecurityController extends Controller
     }
 
     public function createNewRoom(){
-        $room = $_POST['roomName'];
+        $roomName = $_POST['roomName'];
         $password = $_POST['password'];
-        $repeatPassword = $_POST['repeatPassword'];
         if(isset($_POST['liga'])) $liga = true;
         else $liga = false;
         if(isset($_POST['champions'])) $champions = true;
         else $champions = false;
         if(isset($_POST['cup'])) $cup = true;
         else $cup = false;
-        $text = $room . '</br>' .$password . '</br>' .$repeatPassword . '</br>' .$liga .'</br>' .$champions .'</br>' . $cup;
-        return new Response($text);
+        
+        $session = new Session();
+        if(!$this->container->get('session')->isStarted()){
+            $session->start();
+        }
+        else{
+            $session->invalidate();
+            $session->start();
+        } 
+
+        
+        $pattern = "/[^\w.]+/";
+        if(preg_match($pattern, $password)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
+            return $this->redirectToRoute('newRoom');
+        }
+        if(strlen($password)<8 || strlen($password)>20){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
+            return $this->redirectToRoute('newRoom');
+        }
+        if(preg_match($pattern, $roomName)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
+            return $this->redirectToRoute('newRoom');
+        }
+        if(strlen($roomName)<3 || strlen($roomName)>20){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
+            return $this->redirectToRoute('newRoom');
+        }
+        if($liga==false && $champions==false && $cup==false){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
+            return $this->redirectToRoute('newRoom');
+        }
+
+        if($liga==false && $champions==false && $cup==true) $type=0;
+        else if($liga==false && $champions==true && $cup==false) $type=1;
+        else if($liga==false && $champions==true && $cup==true) $type=2;
+        else if($liga==true && $champions==false && $cup==false) $type=3;
+        else if($liga==true && $champions==false && $cup==true) $type=4;
+        else if($liga==true && $champions==true && $cup==false) $type=5;
+        else if($liga==true && $champions==true && $cup==true) $type=6;
+
+        $rooms = $this->getDoctrine()
+        ->getRepository(Room::class)
+        ->findByName($roomName);
+
+        if(count($rooms)!=0){
+            $session->getFlashBag()->add('warning', 'Ya existe una sala con ese nombre');
+            return $this->redirectToRoute('welcome');
+        }
+        else{
+            $myRoom = new Room();
+            $myRoom->setName($roomName);
+            $myRoom->setType($type);
+            $encoder = new BCryptPasswordEncoder(15);
+            $newPassword = $encoder->encodePassword($password, null);
+            $myRoom->setPassword($newPassword);
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $user = $this->getDoctrine()
+                ->getRepository(User::class)
+                ->findByIdUser($this->getUser()->getIdUser());
+            $myRoom->addUser($this->getUser());
+            $entityManager->persist($myRoom);
+            $entityManager->flush();
+            //return $this->render('login/chooseNewOrExistingRoom.html.twig');
+            return new Response('Room created');
+        }
     }
 
     public function index(){
