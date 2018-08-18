@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-07-2018 a las 22:32:35
+-- Tiempo de generación: 18-08-2018 a las 16:05:33
 -- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.7
+-- Versión de PHP: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,19 +25,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `migration_versions`
+-- Estructura de tabla para la tabla `player`
 --
 
-CREATE TABLE `migration_versions` (
-  `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `migration_versions`
---
-
-INSERT INTO `migration_versions` (`version`) VALUES
-('20180718154109');
+CREATE TABLE `player` (
+  `id_player` int(4) NOT NULL,
+  `id_team` int(2) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `position` int(1) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `goals` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -46,56 +44,25 @@ INSERT INTO `migration_versions` (`version`) VALUES
 --
 
 CREATE TABLE `room` (
-  `id_room` int(5) NOT NULL,
-  `password` varchar(30) NOT NULL,
+  `id_room` int(10) NOT NULL,
   `type` int(1) NOT NULL,
-  `name` varchar(20) NOT NULL
+  `date_begin` date NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `password` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `room`
---
-
-INSERT INTO `room` (`id_room`, `password`, `type`, `name`) VALUES
-(1, 'asdfasdf', 1, 'olala');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `teams`
+-- Estructura de tabla para la tabla `team`
 --
 
-CREATE TABLE `teams` (
+CREATE TABLE `team` (
   `id_team` int(2) NOT NULL,
-  `nombre` varchar(30) NOT NULL,
-  `pixeles` varchar(40) NOT NULL
+  `name` varchar(50) NOT NULL,
+  `pix` varchar(50) NOT NULL,
+  `position` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `teams`
---
-
-INSERT INTO `teams` (`id_team`, `nombre`, `pixeles`) VALUES
-(1, 'Athletic Club', '0 -200px'),
-(2, 'AtlÃ©tico de Madrid', '0 -240px'),
-(3, 'CD LeganÃ©s', '0 -920px'),
-(4, 'D. AlavÃ©s', '0 -40px'),
-(5, 'FC Barcelona', '0 -280px'),
-(6, 'Getafe CF', '0 -680px'),
-(7, 'Girona FC', '0 -760px'),
-(8, 'Levante UD', '0 -960px'),
-(9, 'R. Valladolid CF', '0 -1600px'),
-(10, 'Rayo Vallecano', '0 -1240px'),
-(11, 'RC Celta', '0 -400px'),
-(12, 'RCD Espanyol', '0 -600px'),
-(13, 'Real Betis', '0 -320px'),
-(14, 'Real Madrid', '0 -1320px'),
-(15, 'Real Sociedad', '0 -1360px'),
-(16, 'SD Eibar', '0 -520px'),
-(17, 'SD Huesca', '0 -840px'),
-(18, 'Sevilla FC', '0 -1440px'),
-(19, 'Valencia CF', '0 -1560px'),
-(20, 'Villarreal CF', '0 -1640px');
 
 -- --------------------------------------------------------
 
@@ -104,19 +71,12 @@ INSERT INTO `teams` (`id_team`, `nombre`, `pixeles`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id_user` int(5) NOT NULL,
+  `id_user` int(10) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `nickname` varchar(30) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `nickname` varchar(50) NOT NULL,
+  `password` varchar(500) NOT NULL,
   `is_active` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `user`
---
-
-INSERT INTO `user` (`id_user`, `email`, `nickname`, `password`, `is_active`) VALUES
-(32, 'a@gmail.com', 'asdf', '$2y$15$nC7Ar3uVNKQrdMdc1HIDkegCvy0WpL/wiAK8CGf1UdT24SoosCh0K', 0);
 
 -- --------------------------------------------------------
 
@@ -125,8 +85,8 @@ INSERT INTO `user` (`id_user`, `email`, `nickname`, `password`, `is_active`) VAL
 --
 
 CREATE TABLE `user_room` (
-  `user_id` int(5) NOT NULL,
-  `room_id` int(5) NOT NULL
+  `id_user` int(10) NOT NULL,
+  `id_room` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -134,70 +94,56 @@ CREATE TABLE `user_room` (
 --
 
 --
--- Indices de la tabla `migration_versions`
+-- Indices de la tabla `player`
 --
-ALTER TABLE `migration_versions`
-  ADD PRIMARY KEY (`version`);
+ALTER TABLE `player`
+  ADD PRIMARY KEY (`id_player`),
+  ADD KEY `id_team_pk` (`id_team`);
 
 --
 -- Indices de la tabla `room`
 --
 ALTER TABLE `room`
   ADD PRIMARY KEY (`id_room`),
-  ADD KEY `id_room` (`id_room`);
+  ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indices de la tabla `teams`
+-- Indices de la tabla `team`
 --
-ALTER TABLE `teams`
-  ADD PRIMARY KEY (`id_team`);
+ALTER TABLE `team`
+  ADD PRIMARY KEY (`id_team`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`),
-  ADD KEY `id_user` (`id_user`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indices de la tabla `user_room`
 --
 ALTER TABLE `user_room`
-  ADD PRIMARY KEY (`user_id`,`room_id`),
-  ADD KEY `IDX_81E1D5254177093` (`room_id`) USING BTREE;
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `room`
---
-ALTER TABLE `room`
-  MODIFY `id_room` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `teams`
---
-ALTER TABLE `teams`
-  MODIFY `id_team` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT de la tabla `user`
---
-ALTER TABLE `user`
-  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  ADD PRIMARY KEY (`id_user`,`id_room`),
+  ADD KEY `id_room_pk` (`id_room`);
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
+-- Filtros para la tabla `player`
+--
+ALTER TABLE `player`
+  ADD CONSTRAINT `id_team_pk` FOREIGN KEY (`id_team`) REFERENCES `team` (`id_team`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `user_room`
 --
 ALTER TABLE `user_room`
-  ADD CONSTRAINT `FK_81E1D5254177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id_room`),
-  ADD CONSTRAINT `FK_81E1D52A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`);
+  ADD CONSTRAINT `id_room_pk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id_room`),
+  ADD CONSTRAINT `id_user_pk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
