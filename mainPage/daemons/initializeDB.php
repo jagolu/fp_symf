@@ -7,7 +7,7 @@
     //Clean the tables
     $sql = "DELETE FROM player WHERE id_player>0";
     mysqli_query($conn, $sql);
-    $sql = "DELETE FROM teams WHERE id_team>0";
+    $sql = "DELETE FROM team WHERE id_team>0";
     mysqli_query($conn, $sql);
 
     //Delete all images   
@@ -87,7 +87,7 @@
         for($j=$start;$j<strlen($subarray);$j++){   //Get the background-position
             $pix = $pix.$subarray[$j];
         }
-        $sql = "INSERT INTO teams (id_team, nombre,  pixeles) VALUES ($i+1, '".$equipos[$i]."', '".$pix."')";  //INSERT
+        $sql = "INSERT INTO team (id_team, name,  pix, position) VALUES ($i+1, '".$equipos[$i]."', '".$pix."', 1)";  //INSERT
         mysqli_query($conn, $sql);
     }
 
@@ -129,8 +129,8 @@
                                     $folder = '../img/'.$id_player.'.jpg';
                                     file_put_contents($folder, file_get_contents($img));
                                 }
-                                $sql = "INSERT INTO player (id_player, id_team, name, position, active) 
-                                        VALUES ($id_player, $i+1, '".$namePlayer."', '".$position."', 1)";  //
+                                $sql = "INSERT INTO player (id_player, id_team, name, position, active, goals) 
+                                        VALUES ($id_player, $i+1, '".$namePlayer."', '".$position."', 1, 0)";  //
                                 mysqli_query($conn, $sql);
                                 $id_player++;
                             }
