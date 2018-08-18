@@ -157,12 +157,20 @@ class SecurityController extends Controller
             $user = $this->getDoctrine()
                 ->getRepository(User::class)
                 ->findByIdUser($this->getUser()->getIdUser());
-            $myRoom->addUser($this->getUser());
+            $myRoom->addIdUser($this->getUser());
             $entityManager->persist($myRoom);
             $entityManager->flush();
             //return $this->render('login/chooseNewOrExistingRoom.html.twig');
             return new Response('Room created');
         }
+    }
+
+    public function newRoomPage(){
+        return $this->render('login/newRoom.html.twig');
+    }
+
+    public function joinRoomPage(){
+        return $this->render('login/joinRoom.html.twig');
     }
 
     public function index(){

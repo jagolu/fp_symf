@@ -139,7 +139,9 @@ class User implements UserInterface, \Serializable
         }
 
         return $this;
-    }public function getUsername()
+    }
+    
+    public function getUsername()
     {
         return $this->email;
     }

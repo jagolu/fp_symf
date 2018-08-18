@@ -36,16 +36,23 @@ class Player
     private $position;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="active", type="integer", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * @var \Teams
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Teams")
+     * @ORM\Column(name="goals", type="integer", nullable=false)
+     */
+    private $goals;
+
+    /**
+     * @var \Team
+     *
+     * @ORM\ManyToOne(targetEntity="Team")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_team", referencedColumnName="id_team")
      * })
@@ -81,24 +88,36 @@ class Player
         return $this;
     }
 
-    public function getActive(): ?int
+    public function getActive(): ?bool
     {
         return $this->active;
     }
 
-    public function setActive(int $active): self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 
         return $this;
     }
 
-    public function getIdTeam(): ?Teams
+    public function getGoals(): ?int
+    {
+        return $this->goals;
+    }
+
+    public function setGoals(int $goals): self
+    {
+        $this->goals = $goals;
+
+        return $this;
+    }
+
+    public function getIdTeam(): ?Team
     {
         return $this->idTeam;
     }
 
-    public function setIdTeam(?Teams $idTeam): self
+    public function setIdTeam(?Team $idTeam): self
     {
         $this->idTeam = $idTeam;
 

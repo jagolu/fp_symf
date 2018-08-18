@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Room
  *
- * @ORM\Table(name="room", indexes={@ORM\Index(name="id_room", columns={"id_room"})})
+ * @ORM\Table(name="room", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
  * @ORM\Entity
  */
 class Room
@@ -24,13 +24,6 @@ class Room
     private $idRoom;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=30, nullable=false)
-     */
-    private $password;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
@@ -38,42 +31,44 @@ class Room
     private $type;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_begin", type="date", nullable=false)
+     */
+    private $dateBegin;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=20, nullable=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=500, nullable=false)
+     */
+    private $password;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="room")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="idRoom")
      */
-    private $user;
+    private $idUser;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idUser = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getIdRoom(): ?int
     {
         return $this->idRoom;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     public function getType(): ?int
@@ -84,6 +79,18 @@ class Room
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDateBegin(): ?\DateTimeInterface
+    {
+        return $this->dateBegin;
+    }
+
+    public function setDateBegin(\DateTimeInterface $dateBegin): self
+    {
+        $this->dateBegin = $dateBegin;
 
         return $this;
     }
@@ -100,29 +107,41 @@ class Room
         return $this;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     /**
      * @return Collection|User[]
      */
-    public function getUser(): Collection
+    public function getIdUser(): Collection
     {
-        return $this->user;
+        return $this->idUser;
     }
 
-    public function addUser(User $user): self
+    public function addIdUser(User $idUser): self
     {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->addRoom($this);
+        if (!$this->idUser->contains($idUser)) {
+            $this->idUser[] = $idUser;
+            $idUser->addIdRoom($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeIdUser(User $idUser): self
     {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
-            $user->removeRoom($this);
+        if ($this->idUser->contains($idUser)) {
+            $this->idUser->removeElement($idUser);
+            $idUser->removeIdRoom($this);
         }
 
         return $this;

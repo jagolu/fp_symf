@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-08-2018 a las 16:05:33
+-- Tiempo de generación: 18-08-2018 a las 20:45:06
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.8
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `app_porras`
 --
+CREATE DATABASE IF NOT EXISTS `app_porras` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `app_porras`;
 
 -- --------------------------------------------------------
 
@@ -129,6 +131,16 @@ ALTER TABLE `user_room`
   ADD KEY `id_room_pk` (`id_room`);
 
 --
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `user`
+--
+ALTER TABLE `user`
+  MODIFY `id_user` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -142,7 +154,7 @@ ALTER TABLE `player`
 -- Filtros para la tabla `user_room`
 --
 ALTER TABLE `user_room`
-  ADD CONSTRAINT `id_room_pk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id_room`),
+  ADD CONSTRAINT `id_room_pk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `id_user_pk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
