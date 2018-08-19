@@ -134,7 +134,7 @@ class SecurityController extends Controller
 
         if(count($rooms)!=0){
             $session->getFlashBag()->add('warning', 'Ya existe una sala con ese nombre');
-            return $this->redirectToRoute('welcome');
+            return $this->redirectToRoute('newRoom');
         }
         else{
             $myRoom = new Room();
@@ -157,7 +157,43 @@ class SecurityController extends Controller
     }
 
     public function joinExistingRoom(){
-        return new Response('joining in a existing room');
+        $roomName = $_POST['roomName'];
+        $password = $_POST['password'];
+
+        $pattern = "/[^\w.]+/";
+        $session = $this->get('session');
+        if(preg_match($pattern, $password)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al unirse a la sala');
+            return $this->redirectToRoute('joinRoom');
+        }
+        if(strlen($password)<8 || strlen($password)>20){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al unirse a la sala');
+            return $this->redirectToRoute('joinRoom');
+        }
+        if(preg_match($pattern, $roomName)==1){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al unirse a la sala');
+            return $this->redirectToRoute('joinRoom');
+        }
+        if(strlen($roomName)<3 || strlen($roomName)>20){
+            $session->getFlashBag()->add('warning', 'Ha habido un problema al unirse a la sala');
+            return $this->redirectToRoute('joinRoom');
+        }
+
+        $rooms = $this->getDoctrine()
+        ->getRepository(Room::class)
+        ->findByName($roomName);
+
+        if(count($rooms)<1 || count($rooms)>1){
+            $session->getFlashBag()->add('warning', 'No existe ninguna sala con ese nombre');
+            return $this->redirectToRoute('joinRoom');
+        }
+        else{
+            $rooms[0]->addIdUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($rooms[0]);
+            $entityManager->flush();
+            return $this->redirectToRoute('index');
+        }
     }
 
     public function index(){
