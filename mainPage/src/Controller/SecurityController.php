@@ -8,12 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+/*  PROOF   */
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent; 
+use Symfony\Component\HttpFoundation\Request;
+
+/* END PROOF */
 use App\Entity\User;
 use App\Entity\Room;
 
 class SecurityController extends Controller
 {
-    public function checkBeforeRoom(){
+    public function checkBeforeRoom(Request $request){
         $email = $_POST['email'];
         $nickname = $_POST['nickname'];
         $password = $_POST['password'];
@@ -71,10 +77,11 @@ class SecurityController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
             //Here I serialize the symfony session with the user data
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles()); //main is the name of the firewall in your security.yml 
             $this->get('security.token_storage')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
-            //End of the serialize part
+            $event = new InteractiveLoginEvent($request, $token);
+            $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
             return $this->render('login/chooseNewOrExistingRoom.html.twig');
         }
     }
@@ -88,6 +95,7 @@ class SecurityController extends Controller
     }
 
     public function createNewRoom(){
+        $this->get('session');
         $roomName = $_POST['roomName'];
         $password = $_POST['password'];
         if(isset($_POST['liga'])) $liga = true;
@@ -97,14 +105,14 @@ class SecurityController extends Controller
         if(isset($_POST['cup'])) $cup = true;
         else $cup = false;
         
-        $session = new Session();
+        /*$session = new Session();
         if(!$this->container->get('session')->isStarted()){
             $session->start();
         }
         else{
             $session->invalidate();
             $session->start();
-        } 
+        } */
 
         
         $pattern = "/[^\w.]+/";
@@ -166,10 +174,12 @@ class SecurityController extends Controller
     }
 
     public function newRoomPage(){
+        $this->get('session');
         return $this->render('login/newRoom.html.twig');
     }
 
     public function joinRoomPage(){
+        $this->get('session');
         return $this->render('login/joinRoom.html.twig');
     }
 
@@ -190,3 +200,35 @@ class SecurityController extends Controller
         return new Response($text);
     }
 }
+
+/*
+private function logUserIn(User $user) { 
+    $token = new UsernamePasswordToken($user, null, "common", $user->getRoles()); 
+    $request = $this->requestStack->getMasterRequest(); 
+    if (!$request->hasPreviousSession()) { 
+        $request->setSession($this->session); 
+        $request->getSession()->start(); 
+        $request->cookies->set($request->getSession()->getName(), $request->getSession()->getId()); 
+    } 
+    $this->tokenStorage->setToken($token); 
+    $this->session->set('_security_common', serialize($token)); 
+    $event = new InteractiveLoginEvent($this->requestStack->getMasterRequest(), $token); 
+    $this->eventDispatcher->dispatch("security.interactive_login", $event); 
+}
+
+
+public function registerAction() { 
+    // ... if ($this->get("request")->getMethod() == "POST") {
+        // ... Do any password setting here etc $em->persist($user); 
+        //$em->flush(); 
+        // Here, "public" is the name of the firewall in your security.yml 
+        //$token = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles()); 
+        // For older versions of Symfony, use security.context here 
+        //$this->get("security.token_storage")->setToken($token); 
+        // Fire the login event 
+        // Logging the user in above the way we do it doesn't do this automatically 
+        //$event = new InteractiveLoginEvent($request, $token); 
+        //$this->get("event_dispatcher")->dispatch("security.interactive_login", $event); 
+        //// maybe redirect out here 
+    //} 
+} */
