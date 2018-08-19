@@ -9,6 +9,11 @@ login:
 checkBeforeRoom:
   path: /checkBeforeRoom
   controller: App\Controller\SecurityController::checkBeforeRoom
+backToCheckBeforeRoom:
+  path: /chooseNewOrExistingRoom
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+    template: login/chooseNewOrExistingRoom.html.twig
 newRoom:
   path: /newRoom
   controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
@@ -19,6 +24,9 @@ joinRoom:
   controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
   defaults:
     template: login/joinRoom.html.twig
+joinExistingRoom:
+  path: /joinExistingRoom
+  controller: App\Controller\SecurityController::joinExistingRoom
 createNewRoom:
   path: /createNewRoom
   controller: App\Controller\SecurityController::createNewRoom

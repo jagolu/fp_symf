@@ -25,14 +25,7 @@ class SecurityController extends Controller
         $password = $_POST['password'];
         $pattern = "/[^\w.]+/";
 
-        $session = new Session();
-        if(!$this->container->get('session')->isStarted()){
-            $session->start();
-        }
-        else{
-            $session->invalidate();
-            $session->start();
-        } 
+        $session = $this->get('session');
         
         if(strlen($email)<5){
             $session->getFlashBag()->add('warning', 'Ha habido un problema con tu registro');
@@ -95,7 +88,6 @@ class SecurityController extends Controller
     }
 
     public function createNewRoom(){
-        $this->get('session');
         $roomName = $_POST['roomName'];
         $password = $_POST['password'];
         if(isset($_POST['liga'])) $liga = true;
@@ -105,17 +97,8 @@ class SecurityController extends Controller
         if(isset($_POST['cup'])) $cup = true;
         else $cup = false;
         
-        /*$session = new Session();
-        if(!$this->container->get('session')->isStarted()){
-            $session->start();
-        }
-        else{
-            $session->invalidate();
-            $session->start();
-        } */
-
-        
         $pattern = "/[^\w.]+/";
+        $session = $this->get('session');
         if(preg_match($pattern, $password)==1){
             $session->getFlashBag()->add('warning', 'Ha habido un problema al crear la sala');
             return $this->redirectToRoute('newRoom');
@@ -173,15 +156,13 @@ class SecurityController extends Controller
         }
     }
 
+    public function joinExistingRoom(){
+        return new Response('joining in a existing room');
+    }
+
     public function index(){
-        $session = new Session();
-        if(!$this->container->get('session')->isStarted()){
-            $session->start();
-        }
-        else{
-            $session->invalidate();
-            $session->start();
-        } 
+        $session = $this->get('session');
+
         $text = "Te has registrado con: </br>";
         $text = $text . $this->getUser()->getIdUser() .'</br>';
         $text = $text . $this->getUser()->getEmail() .'</br>';
