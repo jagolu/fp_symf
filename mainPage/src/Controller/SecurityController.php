@@ -184,10 +184,15 @@ class SecurityController extends Controller
         ->findByName($roomName);
 
         if(count($rooms)<1 || count($rooms)>1){
-            $session->getFlashBag()->add('warning', 'No existe ninguna sala con ese nombre');
+            $session->getFlashBag()->add('warning', 'El nombre de la sala o la contraseña son incorrectos');
             return $this->redirectToRoute('joinRoom');
         }
         else{
+            $encoder = new BCryptPasswordEncoder(15);
+            if(!$encoder->isPasswordValid($rooms[0]->getPassword(), $password, null)){
+                $session->getFlashBag()->add('warning', 'El nombre de la sala o la contraseña son incorrectos');
+                return $this->redirectToRoute('joinRoom');
+            }
             $rooms[0]->addIdUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rooms[0]);
