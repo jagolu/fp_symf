@@ -11,10 +11,14 @@ checkBeforeRoom:
   controller: App\Controller\SecurityController::checkBeforeRoom
 newRoom:
   path: /newRoom
-  controller: App\Controller\SecurityController::newRoomPage
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+    template: login/newRoom.html.twig
 joinRoom:
   path: /joinRoom
-  controller: App\Controller\SecurityController::joinRoomPage
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+    template: login/joinRoom.html.twig
 createNewRoom:
   path: /createNewRoom
   controller: App\Controller\SecurityController::createNewRoom
