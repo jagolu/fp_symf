@@ -5,13 +5,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use App\Entity\User;
-use App\Entity\Room;
-use App\Entity\Seasonbet;
-use App\Entity\Team;
-use App\Entity\User_room;
-use App\Entity\Player;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityRepository;
+use DOMDocument;
+use DOMNodeList;
+use DOMNode;
+use DOMNamedNodeMap;
 
 class InitializeDBCommand extends ContainerAwareCommand
 {
@@ -40,8 +39,7 @@ class InitializeDBCommand extends ContainerAwareCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) 
-    {
+    protected function execute(InputInterface $input, OutputInterface $output){
         $em = $this->getContainer()->get('doctrine')->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("DELETE FROM user_room WHERE id_user>0");
@@ -66,9 +64,8 @@ class InitializeDBCommand extends ContainerAwareCommand
                 unlink($dir.$file);
             }
             $ficherosEliminados++;
-            $output->writeln($ficherosEliminados);
         }
-/*
+
         $url=file_get_contents('http://www.laliga.es/laliga-santander');
         $html = new DomDocument;
         $teams = new DOMNodeList;
@@ -136,19 +133,28 @@ class InitializeDBCommand extends ContainerAwareCommand
             for($j=$start;$j<strlen($subarray);$j++){   //Get the background-position
                 $pix = $pix.$subarray[$j];
             }
-            $sql = "INSERT INTO team (id_team, name,  pix, position) VALUES ($i+1, '".$equipos[$i]."', '".$pix."', 1)";  //INSERT
-            mysqli_query($conn, $sql);
+            $statement = $connection->prepare("INSERT INTO team (id_team, name,  pix, position) VALUES ($i+1, '".$equipos[$i]."', '".$pix."', 1)");
+            $statement->execute();
         }
 
         //Get players
         $id_player = 1;
         for($i=0;$i<count($hrefs);$i++){
+            //cmd screen
+            $output->writeln("Indexing players of ".$equipos[$i]);
+            //end cmd screen
             $teamPage = new DomDocument;
             $teamPageURL = file_get_contents($hrefs[$i]);
             @$teamPage->loadHTML($teamPageURL);
             
             $wholeSquad = $teamPage->getElementById("plantilla");
             $squad = $wholeSquad->childNodes;
+
+            //cmd screen
+            $io = new SymfonyStyle($input, $output);
+            $io->progressStart();
+            //cmd screen end
+
             for($j=0;$j<$squad->length;$j++){
                 $position = 0; //If is 0 we don't insert on the DB, if 1 the player is a goalkeeper, if is 2 is pitch player
                 for($k=0;$k<$squad[$j]->childNodes->length;$k++){
@@ -175,20 +181,25 @@ class InitializeDBCommand extends ContainerAwareCommand
                                     $namePlayer = $grandChild->childNodes[3]->nodeValue;
                                     if($grandChildSon->hasChildNodes()){
                                         $img = $grandChildSon->childNodes[1]->getAttribute("src");
-                                        $folder = '../img/'.$id_player.'.jpg';
+                                        $folder = 'img/'.$id_player.'.jpg';
                                         file_put_contents($folder, file_get_contents($img));
                                     }
-                                    $sql = "INSERT INTO player (id_player, id_team, name, position, active, goals) 
-                                            VALUES ($id_player, $i+1, '".$namePlayer."', '".$position."', 1, 0)";  //
-                                    mysqli_query($conn, $sql);
+                                    $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals) 
+                                                                       VALUES ($id_player, $i+1, \"".$namePlayer."\", '".$position."', 1, 0)");
+                                    $statement->execute();
                                     $id_player++;
+                                    //cmd screen
+                                    $io->progressAdvance(1); 
+                                    //end cmd screen
                                 }
                             }
                         }
                     }
                 }   
             }
-        }*/
+            $io->progressFinish();
         }
+        $io->success('All the teams and their playes are in our DB!!');
     }
+}
 ?>
