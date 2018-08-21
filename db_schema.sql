@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-08-2018 a las 23:12:10
+-- Tiempo de generación: 21-08-2018 a las 23:02:45
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -33,7 +33,7 @@ USE `app_porras`;
 CREATE TABLE `player` (
   `id_player` int(4) NOT NULL,
   `id_team` int(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `position` int(1) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `goals` int(3) NOT NULL
@@ -79,8 +79,8 @@ CREATE TABLE `seasonbet` (
 
 CREATE TABLE `team` (
   `id_team` int(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `pix` varchar(50) NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `pix` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `position` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
