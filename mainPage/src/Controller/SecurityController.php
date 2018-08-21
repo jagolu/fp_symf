@@ -8,12 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-/*  PROOF   */
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent; 
 use Symfony\Component\HttpFoundation\Request;
-
-/* END PROOF */
 use App\Entity\User;
 use App\Entity\Room;
 
