@@ -199,7 +199,7 @@ class InitializeDBCommand extends ContainerAwareCommand
             }
             $io->progressFinish();
         }
-        $io->success('All the teams and their playes are in our DB!!');
+        $io->success('All the teams and their players are in our DB!!');
     }
 }
 ?>

@@ -69,6 +69,9 @@ class UpdateDBCommand extends ContainerAwareCommand
 
         //Get players
         $id_player = 1;
+        $allPlayers = [];
+        $allTeamsPlayers = [];
+
         for($i=0;$i<count($hrefs);$i++){
             //cmd screen
             $output->writeln("Indexing players of ".$equipos[$i]);
@@ -82,7 +85,7 @@ class UpdateDBCommand extends ContainerAwareCommand
 
             //cmd screen
             $io = new SymfonyStyle($input, $output);
-       //     $io->progressStart();
+            $io->progressStart();
             //cmd screen end
 
             for($j=0;$j<$squad->length;$j++){
@@ -130,30 +133,21 @@ class UpdateDBCommand extends ContainerAwareCommand
                                         $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals) 
                                                                            VALUES ($numberTotalOfPlayers, $i+1, \"".$namePlayer."\", '".$position."', 1, 0)");
                                         $statement->execute();
+                                        $output->writeln("A player didnt exist");
                                     }
-                                    else if($isThePlayerActive == 1){
-                                        //The player exists and is active
-                                        //so I have nothing to do
-                                    }
-                                    else{
+                                    else if($isThePlayerActive == 0){
                                         //The player exists but is not active
                                         $statement = $connection->prepare("UPDATE player SET active = 1 
                                                                            WHERE id_team = $i+1 AND name = \"$namePlayer\"");
                                         $statement->execute();
+                                        $output->writeln("A player that existed wasnt active");
                                     }
-                                    //Maybe save all in two arrays the id_team with player_name and
-                                    //if its in the db but no in the arrays that player in the db have to set active = 0
+                                    else{
 
-
-                                    /*if($grandChildSon->hasChildNodes()){
-                                        $img = $grandChildSon->childNodes[1]->getAttribute("src");
-                                        $folder = 'img/'.$id_player.'.jpg';
-                                        file_put_contents($folder, file_get_contents($img));
                                     }
-                                    $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals) 
-                                                                       VALUES ($id_player, $i+1, \"".$namePlayer."\", '".$position."', 1, 0)");
-                                    $statement->execute();
-                                    $id_player++;
+
+                                    $allPlayers [] = $namePlayer;
+                                    $allTeamsPlayers [] = $i+1;
                                     //cmd screen
                                     $io->progressAdvance(1); 
                                     //end cmd screen*/
@@ -163,9 +157,37 @@ class UpdateDBCommand extends ContainerAwareCommand
                     }
                 }   
             }
-           // $io->progressFinish();
+            $io->progressFinish();
         }
-       // $io->success('All the teams and their playes are in our DB!!');
+        //Check if a player is inactive
+        $totalPlayersRightNow = 0;
+        for($idTeam=1; $idTeam<(count($equipos)+1); $idTeam++){
+            $statement = $connection->prepare("SELECT id_player, name FROM player 
+                                        WHERE id_team = $idTeam");
+            $statement->execute();
+            while($row=$statement->fetch()){
+                $theName = $row['name'];
+                $isInIt = false;
+                for($j=0;$j<count($allTeamsPlayers);$j++){
+                    if($allTeamsPlayers[$j]==$idTeam){
+                        if($allPlayers[$j]==$theName){
+                            $isInIt = true;
+                            $totalPlayersRightNow = $totalPlayersRightNow+1;
+                            break;
+                        }
+                    }
+                    if($isInIt) break;
+                }
+                if(!$isInIt){
+                    $statement = $connection->prepare("UPDATE player SET active = 0 
+                                                WHERE id_team = $idTeam AND name = \"$theName\"");
+                    $statement->execute();
+                    $output->writeln("A player has set innactive");
+                }
+            }
+        }
+        $io->success('All the players have been updated in our DB!!');
+        $io->success('There are '.$totalPlayersRightNow.' active players');
     }
 }
 ?>
