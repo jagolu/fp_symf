@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-08-2018 a las 23:02:45
+-- Tiempo de generación: 30-08-2018 a las 21:14:31
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -36,7 +36,12 @@ CREATE TABLE `player` (
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `position` int(1) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `goals` int(3) NOT NULL
+  `goals` int(3) NOT NULL,
+  `shots` int(4) NOT NULL,
+  `passes` int(4) NOT NULL,
+  `assits` int(3) NOT NULL,
+  `recoveries` int(4) NOT NULL,
+  `goals_conceded` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

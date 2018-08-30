@@ -50,6 +50,41 @@ class Player
     private $goals;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="shots", type="integer", nullable=false)
+     */
+    private $shots;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="passes", type="integer", nullable=false)
+     */
+    private $passes;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="assits", type="integer", nullable=false)
+     */
+    private $assits;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="recoveries", type="integer", nullable=false)
+     */
+    private $recoveries;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="goals_conceded", type="integer", nullable=false)
+     */
+    private $goalsConceded;
+
+    /**
      * @var \Team
      *
      * @ORM\ManyToOne(targetEntity="Team")
@@ -108,6 +143,66 @@ class Player
     public function setGoals(int $goals): self
     {
         $this->goals = $goals;
+
+        return $this;
+    }
+
+    public function getShots(): ?int
+    {
+        return $this->shots;
+    }
+
+    public function setShots(int $shots): self
+    {
+        $this->shots = $shots;
+
+        return $this;
+    }
+
+    public function getPasses(): ?int
+    {
+        return $this->passes;
+    }
+
+    public function setPasses(int $passes): self
+    {
+        $this->passes = $passes;
+
+        return $this;
+    }
+
+    public function getAssits(): ?int
+    {
+        return $this->assits;
+    }
+
+    public function setAssits(int $assits): self
+    {
+        $this->assits = $assits;
+
+        return $this;
+    }
+
+    public function getRecoveries(): ?int
+    {
+        return $this->recoveries;
+    }
+
+    public function setRecoveries(int $recoveries): self
+    {
+        $this->recoveries = $recoveries;
+
+        return $this;
+    }
+
+    public function getGoalsConceded(): ?int
+    {
+        return $this->goalsConceded;
+    }
+
+    public function setGoalsConceded(int $goalsConceded): self
+    {
+        $this->goalsConceded = $goalsConceded;
 
         return $this;
     }
