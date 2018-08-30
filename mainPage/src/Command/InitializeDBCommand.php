@@ -184,8 +184,8 @@ class InitializeDBCommand extends ContainerAwareCommand
                                         $folder = 'img/'.$id_player.'.jpg';
                                         file_put_contents($folder, file_get_contents($img));
                                     }
-                                    $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals) 
-                                                                       VALUES ($id_player, $i+1, \"".$namePlayer."\", '".$position."', 1, 0)");
+                                    $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals, shots, passes, assits, recoveries, goals_conceded) 
+                                                                       VALUES ($id_player, $i+1, \"".$namePlayer."\", '".$position."', 1, 0, 0, 0, 0, 0, 0)");
                                     $statement->execute();
                                     $id_player++;
                                     //cmd screen
