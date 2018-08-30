@@ -70,15 +70,15 @@ class UpdateDBCommand extends ContainerAwareCommand
         //Get players
         $id_player = 1;
         $allPlayers = [];
-        $allTeamsPlayers = [];
 
         for($i=0;$i<count($hrefs);$i++){
             //cmd screen
-            $output->writeln("Indexing players of ".$equipos[$i]);
+            $output->writeln("Updating players of ".$equipos[$i]);
             //end cmd screen
             $teamPage = new DomDocument;
             $teamPageURL = file_get_contents($hrefs[$i]);
             @$teamPage->loadHTML($teamPageURL);
+            $thisTeamPlayers = [];
             
             $wholeSquad = $teamPage->getElementById("plantilla");
             $squad = $wholeSquad->childNodes;
@@ -142,12 +142,8 @@ class UpdateDBCommand extends ContainerAwareCommand
                                         $statement->execute();
                                         $output->writeln("A player that existed wasnt active");
                                     }
-                                    else{
 
-                                    }
-
-                                    $allPlayers [] = $namePlayer;
-                                    $allTeamsPlayers [] = $i+1;
+                                    $thisTeamPlayers [] = $namePlayer;
                                     //cmd screen
                                     $io->progressAdvance(1); 
                                     //end cmd screen*/
@@ -157,33 +153,27 @@ class UpdateDBCommand extends ContainerAwareCommand
                     }
                 }   
             }
+            $allPlayers [] = $thisTeamPlayers;
             $io->progressFinish();
         }
+
         //Check if a player is inactive
         $totalPlayersRightNow = 0;
-        for($idTeam=1; $idTeam<(count($equipos)+1); $idTeam++){
-            $statement = $connection->prepare("SELECT id_player, name FROM player 
+        for($idTeam=1; $idTeam<(count($allPlayers)+1); $idTeam++){
+            $statement = $connection->prepare("SELECT id_player, name, active FROM player 
                                         WHERE id_team = $idTeam");
             $statement->execute();
             while($row=$statement->fetch()){
                 $theName = $row['name'];
                 $isInIt = false;
-                for($j=0;$j<count($allTeamsPlayers);$j++){
-                    if($allTeamsPlayers[$j]==$idTeam){
-                        if($allPlayers[$j]==$theName){
-                            $isInIt = true;
-                            $totalPlayersRightNow = $totalPlayersRightNow+1;
-                            break;
-                        }
-                    }
-                    if($isInIt) break;
-                }
-                if(!$isInIt){
-                    $statement = $connection->prepare("UPDATE player SET active = 0 
+                if(!in_array($theName, $allPlayers[$idTeam-1]) && $row['active']==1){
+                    $statement2 = $connection->prepare("UPDATE player SET active=0 
                                                 WHERE id_team = $idTeam AND name = \"$theName\"");
-                    $statement->execute();
+                    $statement2->execute();
                     $output->writeln("A player has set innactive");
+                    $totalPlayersRightNow = $totalPlayersRightNow-1;
                 }
+                $totalPlayersRightNow = $totalPlayersRightNow+1;
             }
         }
         $io->success('All the players have been updated in our DB!!');
