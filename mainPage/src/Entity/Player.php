@@ -29,6 +29,13 @@ class Player
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="fullName", type="string", length=100, nullable=false)
+     */
+    private $fullname;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
@@ -107,6 +114,18 @@ class Player
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getFullname(): ?string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(string $fullname): self
+    {
+        $this->fullname = $fullname;
 
         return $this;
     }

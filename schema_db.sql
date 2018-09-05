@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-08-2018 a las 21:14:31
+-- Tiempo de generación: 05-09-2018 a las 22:52:06
 -- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.7
+-- Versión de PHP: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -34,6 +34,7 @@ CREATE TABLE `player` (
   `id_player` int(4) NOT NULL,
   `id_team` int(2) NOT NULL,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fullName` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `position` int(1) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `goals` int(3) NOT NULL,
