@@ -152,7 +152,7 @@ class InitializeDBCommand extends ContainerAwareCommand
 
             //cmd screen
             $io = new SymfonyStyle($input, $output);
-            $io->progressStart();
+            //$io->progressStart();
             //cmd screen end
 
             for($j=0;$j<$squad->length;$j++){
@@ -182,14 +182,23 @@ class InitializeDBCommand extends ContainerAwareCommand
                                     if($grandChildSon->hasChildNodes()){
                                         $img = $grandChildSon->childNodes[1]->getAttribute("src");
                                         $folder = 'img/'.$id_player.'.jpg';
-                                        file_put_contents($folder, file_get_contents($img));
+                                        //file_put_contents($folder, file_get_contents($img));
+                                        /*Get the full name of the player */
+                                        $playerURL = $grandChild->getAttribute("href");
+                                        //$output->writeln('url-->'.$playerURL);
+                                        $urlOfThePlayer=file_get_contents($playerURL);
+                                        $html2 = new DomDocument;
+                                        @$html2->loadHTML($urlOfThePlayer);
+                                        $fullNamePlayer = $html2->getElementById("nombre")->textContent;
+                                        /* End get the full name of the player */
                                     }
                                     $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals, shots, passes, assits, recoveries, goals_conceded) 
                                                                        VALUES ($id_player, $i+1, \"".$namePlayer."\", '".$position."', 1, 0, 0, 0, 0, 0, 0)");
-                                    $statement->execute();
+                                    $output->writeln($namePlayer.'---->'.$fullNamePlayer);
+                                    //$statement->execute();
                                     $id_player++;
                                     //cmd screen
-                                    $io->progressAdvance(1); 
+                                    //$io->progressAdvance(1); 
                                     //end cmd screen
                                 }
                             }
@@ -197,7 +206,7 @@ class InitializeDBCommand extends ContainerAwareCommand
                     }
                 }   
             }
-            $io->progressFinish();
+            //$io->progressFinish();
         }
         $io->success('All the teams and their players are in our DB!!');
     }
