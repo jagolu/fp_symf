@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-09-2018 a las 22:52:06
+-- Tiempo de generación: 07-09-2018 a las 16:27:22
 -- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.8
+-- Versión de PHP: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,7 +21,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `app_porras`
 --
-CREATE DATABASE IF NOT EXISTS `app_porras` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `app_porras` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `app_porras`;
 
 -- --------------------------------------------------------

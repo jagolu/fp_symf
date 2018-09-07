@@ -185,11 +185,14 @@ class InitializeDBCommand extends ContainerAwareCommand
                                         file_put_contents($folder, file_get_contents($img));
                                         /*Get the full name of the player */
                                         $playerURL = $grandChild->getAttribute("href");
-                                        $urlOfThePlayer=file_get_contents($playerURL);
-                                        $html2 = new DomDocument;
-                                        @$html2->loadHTML($urlOfThePlayer);
-                                        $fullNamePlayer = $html2->getElementById("nombre")->textContent;
-                                        /* End get the full name of the player */
+                                        if($playerURL!=null){
+                                            $urlOfThePlayer=file_get_contents($playerURL);
+                                            $html2 = new DomDocument;
+                                            @$html2->loadHTML($urlOfThePlayer);
+                                            $fullNamePlayer = $html2->getElementById("nombre")->textContent;
+                                            /* End get the full name of the player */
+                                        }
+                                        else $fullNamePlayer = $namePlayer;
                                     }
                                     $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, fullName, position, active, goals, shots, passes, assits, recoveries, goals_conceded) 
                                                                        VALUES ($id_player, $i+1, \"".$namePlayer."\", \"".$fullNamePlayer."\",'".$position."', 1, 0, 0, 0, 0, 0, 0)");
