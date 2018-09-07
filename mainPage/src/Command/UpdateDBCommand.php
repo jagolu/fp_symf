@@ -130,8 +130,8 @@ class UpdateDBCommand extends ContainerAwareCommand
                                             $folder = 'img/'.$numberTotalOfPlayers.'.jpg';
                                             file_put_contents($folder, file_get_contents($img));
                                         }
-                                        $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, position, active, goals) 
-                                                                           VALUES ($numberTotalOfPlayers, $i+1, \"".$namePlayer."\", '".$position."', 1, 0)");
+                                        $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, fullName, position, active, goals, shots, passes, assits, recoveries, goals_conceded) 
+                                                                           VALUES ($numberTotalOfPlayers, $i+1, \"".$namePlayer."\", '".$position."', 1, 0, 0, 0, 0, 0, 0)");
                                         $statement->execute();
                                         $output->writeln("A player didnt exist");
                                     }
