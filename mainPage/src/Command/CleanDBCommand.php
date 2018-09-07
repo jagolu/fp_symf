@@ -31,7 +31,7 @@ class CleanDBCommand extends ContainerAwareCommand
 
         // the full command description shown when running the command with
         // the "--help" option
-        ->setHelp('Delete all the data from all the tables of the database')
+        ->setHelp('Delete all the data from all the tables of the database and delete all the images')
         ;
     }
 
@@ -51,8 +51,19 @@ class CleanDBCommand extends ContainerAwareCommand
         $statement = $connection->prepare("DELETE FROM room WHERE id_room>=0");
         $statement->execute();
         
+        //Delete all images   
+        $dir = 'img/';
+        $handle = opendir($dir);
+        $ficherosEliminados = 0;
+        while ($file = readdir($handle)) {
+            if (is_file($dir.$file)) {
+                unlink($dir.$file);
+            }
+            $ficherosEliminados++;
+        }
+
         $io = new SymfonyStyle($input, $output);
-        $io->success('All the tables of the database are empty');
+        $io->success('All the images and tables of the database are empty');
     }
 }
 ?>
