@@ -129,9 +129,19 @@ class UpdateDBCommand extends ContainerAwareCommand
                                             $img = $grandChildSon->childNodes[1]->getAttribute("src");
                                             $folder = 'img/'.$numberTotalOfPlayers.'.jpg';
                                             file_put_contents($folder, file_get_contents($img));
+                                            /*Get the full name of the player */
+                                            $playerURL = $grandChild->getAttribute("href");
+                                            if($playerURL!=null){
+                                                $urlOfThePlayer=file_get_contents($playerURL);
+                                                $html2 = new DomDocument;
+                                                @$html2->loadHTML($urlOfThePlayer);
+                                                $fullNamePlayer = $html2->getElementById("nombre")->textContent;
+                                                /* End get the full name of the player */
+                                            }
+                                            else $fullNamePlayer = $namePlayer;
                                         }
                                         $statement = $connection->prepare("INSERT INTO player (id_player, id_team, name, fullName, position, active, goals, shots, passes, assits, recoveries, goals_conceded) 
-                                                                           VALUES ($numberTotalOfPlayers, $i+1, \"".$namePlayer."\", '".$position."', 1, 0, 0, 0, 0, 0, 0)");
+                                                                           VALUES ($numberTotalOfPlayers, $i+1, \"".$namePlayer."\", \"".$fullNamePlayer."\",'".$position."', 1, 0, 0, 0, 0, 0, 0)");
                                         $statement->execute();
                                         $output->writeln("A player didnt exist");
                                     }
@@ -176,6 +186,47 @@ class UpdateDBCommand extends ContainerAwareCommand
                 $totalPlayersRightNow = $totalPlayersRightNow+1;
             }
         }
+
+        //Check if any player has moved to another team in the same league
+        //I think that we can delete the p1.position = p2.position--> cause it's so dificult (or difficult)
+        //that there is 2 players with the same name and the same fullName 
+        $statement = $connection->prepare("SELECT p1.id_player, p1.id_team FROM player p1, player p2 
+                            WHERE p1.name = p2.name and
+                                  p1.fullName = p2.fullName and
+                                  p1.position = p2.position and
+                                  p1.id_team != p2.id_team and
+                                  p1.active != p2.active 
+                            ");
+        $statement->execute();
+
+        $playersToDelete = [];
+        while($row=$statement->fetch()){
+            $playersToDelete [] = $row['id_player'];
+            $newIdTeam = $row['id_team'];
+            $row=$statement->fetch();
+            $oldIdPlayer = $row['id_player'];
+
+            $changeTheTeam = $connection->prepare("UPDATE player SET id_team=$newIdTeam 
+                                    WHERE id_player = $oldIdPlayer");
+            $oldPlayer->execute();
+            $output->writeln("A player has moved to another team in the same league.");
+        }
+
+        if(count($playersToDelete)>0){
+            $deletePlayers = "DELETE * FROM player WHERE id_player IN (".implode(',',$playersToDelete).")";
+            $output->writeln("aqui");
+            $statement->execute();
+        }
+        else{
+            $playersToDelete [] = 1;
+            $playersToDelete [] = 2;
+            $playersToDelete [] = 3;
+            $idsToDelete = implode(',', $playersToDelete);
+            $deletePlayers = $connection->prepare("DELETE FROM player WHERE id_player IN (".implode(',', $playersToDelete).")");
+            $deletePlayers->execute();
+        }
+        //End check if any player has moved to another team in the same league
+
         $io->success('All the players have been updated in our DB!!');
         $io->success('There are '.$totalPlayersRightNow.' active players');
     }
