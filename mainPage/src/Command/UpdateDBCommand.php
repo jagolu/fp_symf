@@ -214,16 +214,10 @@ class UpdateDBCommand extends ContainerAwareCommand
 
         if(count($playersToDelete)>0){
             $deletePlayers = "DELETE * FROM player WHERE id_player IN (".implode(',',$playersToDelete).")";
-            $output->writeln("aqui");
-            $statement->execute();
-        }
-        else{
-            $playersToDelete [] = 1;
-            $playersToDelete [] = 2;
-            $playersToDelete [] = 3;
-            $idsToDelete = implode(',', $playersToDelete);
-            $deletePlayers = $connection->prepare("DELETE FROM player WHERE id_player IN (".implode(',', $playersToDelete).")");
             $deletePlayers->execute();
+            for($image=0;$image<count($playersToDelete);$image++){
+                unlink('img/'.$playersToDelete[$image].'.jpg');
+            }
         }
         //End check if any player has moved to another team in the same league
 
