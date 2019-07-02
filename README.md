@@ -26,7 +26,7 @@ On the folter:
 
     - src/Command
 
-#### CleanDBa
+#### CleanDB
 
 Clean all the data from an specific tables.
 
